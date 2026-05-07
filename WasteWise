@@ -1,0 +1,2987 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>WasteWise AI — Intelligent Waste Management</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --green-deep: #0a2e1a;
+    --green-mid: #144d28;
+    --green-bright: #22c55e;
+    --green-pale: #bbf7d0;
+    --green-glow: #4ade80;
+    --amber: #f59e0b;
+    --red: #ef4444;
+    --blue: #3b82f6;
+    --purple: #8b5cf6;
+    --pink: #ec4899;
+    --bg: #050f08;
+    --surface: #0c1f11;
+    --surface2: #112618;
+    --border: rgba(34,197,94,0.18);
+    --text: #e8f5ee;
+    --muted: #6b9e7c;
+    --font-head: 'Syne', sans-serif;
+    --font-body: 'DM Sans', sans-serif;
+    --gradient-primary: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
+    --gradient-secondary: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+    --shadow-glow: 0 0 20px rgba(34, 197, 94, 0.3);
+    --shadow-card: 0 4px 20px rgba(0, 0, 0, 0.3);
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font-body);
+    font-size: 16px;
+    line-height: 1.7;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* ── ANIMATED BACKGROUND ── */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      radial-gradient(circle at 20% 80%, rgba(34,197,94,0.1) 0%, transparent 50%),
+      radial-gradient(circle at 80% 20%, rgba(59,130,246,0.1) 0%, transparent 50%),
+      radial-gradient(circle at 40% 40%, rgba(139,92,246,0.1) 0%, transparent 50%),
+      linear-gradient(rgba(34,197,94,0.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(34,197,94,0.04) 1px, transparent 1px);
+    background-size: 100% 100%, 100% 100%, 100% 100%, 60px 60px;
+    pointer-events: none;
+    z-index: 0;
+    animation: backgroundFloat 20s ease-in-out infinite;
+  }
+
+  @keyframes fadeInUp {
+    0% { opacity: 0; transform: translateY(30px); }
+    100% { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: rgba(5,15,8,0.95);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--border);
+    padding: 0 clamp(1rem,5vw,4rem);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 64px;
+    transition: all 0.3s ease;
+  }
+  nav:hover {
+    background: rgba(5,15,8,0.98);
+    box-shadow: var(--shadow-glow);
+  }
+  .logo {
+    font-family: var(--font-head);
+    font-size: 1.3rem;
+    font-weight: 800;
+    color: var(--green-bright);
+    letter-spacing: -0.5px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    text-decoration: none;
+    transition: all 0.3s ease;
+  }
+  .logo:hover {
+    color: var(--green-glow);
+    transform: scale(1.05);
+  }
+  .logo-icon {
+    width: 32px; height: 32px;
+    background: var(--gradient-primary);
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 16px;
+    animation: pulse 2s ease-in-out infinite;
+  }
+  @keyframes pulse {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.4); }
+    50% { box-shadow: 0 0 0 10px rgba(34, 197, 94, 0); }
+  }
+  nav ul {
+    list-style: none;
+    display: flex;
+    gap: 2rem;
+  }
+  nav a {
+    color: var(--muted);
+    text-decoration: none;
+    font-size: 0.9rem;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    position: relative;
+  }
+  nav a::after {
+    content: '';
+    position: absolute;
+    bottom: -5px;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background: var(--gradient-primary);
+    transition: width 0.3s ease;
+  }
+  nav a:hover::after { width: 100%; }
+  nav a:hover { color: var(--green-bright); transform: translateY(-2px); }
+  .nav-cta {
+    background: var(--gradient-primary);
+    color: #000 !important;
+    padding: 8px 18px;
+    border-radius: 10px;
+    font-weight: 600 !important;
+    font-size: 0.88rem !important;
+    transition: all 0.3s ease !important;
+    border: none;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+  }
+  .nav-cta::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(45deg, transparent, rgba(255,255,255,0.2), transparent);
+    transform: translateX(-100%);
+    transition: transform 0.6s ease;
+  }
+  .nav-cta:hover::before { transform: translateX(100%); }
+  .nav-cta:hover { background: var(--green-glow); transform: translateY(-2px) scale(1.05); box-shadow: var(--shadow-glow); }
+
+  /* ── MAIN WRAPPER ── */
+  main { position: relative; z-index: 1; }
+
+  /* ── HERO ── */
+  .hero {
+    padding: clamp(4rem,10vh,8rem) clamp(1rem,5vw,4rem) clamp(3rem,8vh,6rem);
+    text-align: center;
+    max-width: 860px;
+    margin: 0 auto;
+    position: relative;
+  }
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 200px;
+    height: 200px;
+    background: radial-gradient(circle, rgba(34,197,94,0.1) 0%, transparent 70%);
+    border-radius: 50%;
+    animation: heroGlow 4s ease-in-out infinite alternate;
+  }
+  @keyframes heroGlow {
+    0% { transform: translate(-50%, -50%) scale(1); opacity: 0.5; }
+    100% { transform: translate(-50%, -50%) scale(1.2); opacity: 1; }
+  }
+  .hero-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(34,197,94,0.1);
+    border: 1px solid rgba(34,197,94,0.3);
+    color: var(--green-bright);
+    padding: 6px 14px;
+    border-radius: 100px;
+    font-size: 0.8rem;
+    font-weight: 500;
+    letter-spacing: 0.5px;
+    margin-bottom: 1.5rem;
+    text-transform: uppercase;
+    animation: fadeInUp 1s ease-out;
+    box-shadow: 0 0 10px rgba(34,197,94,0.2);
+  }
+  .hero h1 {
+    font-family: var(--font-head);
+    font-size: clamp(2.4rem, 6vw, 4.2rem);
+    font-weight: 800;
+    line-height: 1.1;
+    letter-spacing: -1.5px;
+    margin-bottom: 1.2rem;
+    color: #fff;
+    animation: fadeInUp 1s ease-out 0.2s both;
+    background: linear-gradient(135deg, #fff 0%, #bbf7d0 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .hero h1 span {
+    background: var(--gradient-primary);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: textGlow 2s ease-in-out infinite alternate;
+  }
+  @keyframes textGlow {
+    0% { filter: brightness(1); }
+    100% { filter: brightness(1.2); }
+  }
+  .hero p {
+    font-size: clamp(1rem, 2vw, 1.15rem);
+    color: var(--muted);
+    max-width: 580px;
+    margin: 0 auto 2rem;
+    font-weight: 300;
+    animation: fadeInUp 1s ease-out 0.4s both;
+  }
+  .hero-btns {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    flex-wrap: wrap;
+    animation: fadeInUp 1s ease-out 0.6s both;
+  }
+  .btn-primary {
+    background: var(--gradient-primary);
+    color: #000;
+    padding: 14px 28px;
+    border-radius: 10px;
+    font-weight: 700;
+    font-size: 0.95rem;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    border: none;
+    cursor: pointer;
+    font-family: var(--font-body);
+    position: relative;
+    overflow: hidden;
+    box-shadow: var(--shadow-card);
+  }
+  .btn-primary::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(45deg, transparent, rgba(255,255,255,0.2), transparent);
+    transform: translateX(-100%);
+    transition: transform 0.6s ease;
+  }
+  .btn-primary:hover::before { transform: translateX(100%); }
+  .btn-primary:hover {
+    background: var(--green-glow);
+    transform: translateY(-3px) scale(1.05);
+    box-shadow: var(--shadow-glow);
+  }
+  .btn-secondary {
+    background: transparent;
+    color: var(--text);
+    padding: 13px 28px;
+    border-radius: 10px;
+    font-weight: 500;
+    font-size: 0.95rem;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    border: 1px solid var(--border);
+    cursor: pointer;
+    font-family: var(--font-body);
+    position: relative;
+  }
+  .btn-secondary::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: var(--gradient-primary);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+  .btn-secondary:hover::before { opacity: 0.1; }
+  .btn-secondary:hover {
+    border-color: var(--green-bright);
+    color: var(--green-bright);
+    transform: translateY(-2px);
+    box-shadow: 0 0 15px rgba(34,197,94,0.3);
+  }
+
+  /* ── STATS STRIP ── */
+  .stats-strip {
+    display: flex;
+    justify-content: center;
+    gap: clamp(1.5rem, 5vw, 4rem);
+    padding: 2rem clamp(1rem,5vw,4rem);
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    flex-wrap: wrap;
+    position: relative;
+  }
+  .stats-strip::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(90deg, transparent, rgba(34,197,94,0.05), transparent);
+    animation: shimmer 3s ease-in-out infinite;
+  }
+  @keyframes shimmer {
+    0%, 100% { transform: translateX(-100%); }
+    50% { transform: translateX(100%); }
+  }
+  .stat {
+    text-align: center;
+    animation: fadeInUp 1s ease-out 0.8s both;
+    position: relative;
+    z-index: 1;
+  }
+  .stat:hover {
+    transform: translateY(-5px);
+    transition: transform 0.3s ease;
+  }
+  .stat-num {
+    font-family: var(--font-head);
+    font-size: 2rem;
+    font-weight: 800;
+    color: var(--green-bright);
+    margin-bottom: 0.5rem;
+    text-shadow: 0 0 10px rgba(34,197,94,0.5);
+  }
+  .stat-label {
+    font-size: 0.8rem;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  /* ── SECTION LAYOUT ── */
+  section {
+    padding: clamp(3rem,8vw,5rem) clamp(1rem,5vw,4rem);
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+  .section-label {
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: var(--green-bright);
+    margin-bottom: 0.5rem;
+  }
+  .section-title {
+    font-family: var(--font-head);
+    font-size: clamp(1.8rem,4vw,2.4rem);
+    font-weight: 800;
+    color: #fff;
+    letter-spacing: -0.5px;
+    margin-bottom: 0.5rem;
+    line-height: 1.2;
+  }
+  .section-sub { color: var(--muted); margin-bottom: 2.5rem; max-width: 540px; }
+
+  /* ── WASTE TYPES GRID ── */
+  .waste-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: 12px;
+  }
+  .waste-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 1.2rem 1rem;
+    text-align: center;
+    transition: all 0.25s;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+  }
+  .waste-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(34,197,94,0.1), transparent);
+    transition: left 0.5s ease;
+  }
+  .waste-card:hover::before {
+    left: 100%;
+  }
+  .waste-card:hover {
+    border-color: var(--green-bright);
+    transform: translateY(-5px) scale(1.02);
+    background: var(--surface2);
+    box-shadow: var(--shadow-glow);
+  }
+  .waste-icon { font-size: 2rem; margin-bottom: 0.5rem; display: block; }
+  .waste-name {
+    font-family: var(--font-head);
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 0.2rem;
+  }
+  .waste-desc { font-size: 0.75rem; color: var(--muted); line-height: 1.4; }
+
+  /* ── SCANNER SECTION ── */
+  #scanner {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: clamp(1.5rem,4vw,2.5rem);
+    max-width: 840px;
+    margin: 0 auto;
+  }
+  .scanner-tabs {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 1.5rem;
+    background: var(--bg);
+    padding: 4px;
+    border-radius: 10px;
+    border: 1px solid var(--border);
+  }
+  .tab-btn {
+    flex: 1;
+    padding: 10px;
+    border: none;
+    border-radius: 7px;
+    background: transparent;
+    color: var(--muted);
+    font-family: var(--font-body);
+    font-size: 0.88rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+  }
+  .tab-btn.active {
+    background: var(--green-bright);
+    color: #000;
+    font-weight: 700;
+  }
+
+  /* UPLOAD ZONE */
+  .upload-zone {
+    border: 2px dashed var(--border);
+    border-radius: 14px;
+    padding: 3rem 2rem;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.2s;
+    position: relative;
+  }
+  .upload-zone:hover, .upload-zone.drag-over {
+    border-color: var(--green-bright);
+    background: rgba(34,197,94,0.04);
+  }
+  .upload-zone input[type=file] {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    cursor: pointer;
+    width: 100%;
+    height: 100%;
+  }
+  .upload-icon { font-size: 2.5rem; margin-bottom: 0.8rem; display: block; }
+  .upload-text { font-weight: 600; color: #fff; margin-bottom: 0.3rem; }
+  .upload-hint { font-size: 0.83rem; color: var(--muted); }
+
+  /* CAMERA ZONE */
+  .camera-zone { position: relative; }
+  #cameraFeed {
+    width: 100%;
+    max-height: 340px;
+    object-fit: cover;
+    border-radius: 14px;
+    border: 1px solid var(--border);
+    display: none;
+    background: #000;
+  }
+  .camera-placeholder {
+    border: 2px dashed var(--border);
+    border-radius: 14px;
+    padding: 3rem 2rem;
+    text-align: center;
+    background: #000;
+  }
+  .camera-controls {
+    display: flex;
+    gap: 10px;
+    margin-top: 1rem;
+    flex-wrap: wrap;
+  }
+  #previewImg {
+    width: 100%;
+    max-height: 300px;
+    object-fit: contain;
+    border-radius: 12px;
+    border: 1px solid var(--border);
+    display: none;
+    margin-top: 1rem;
+    background: #000;
+  }
+
+  /* ERROR MSG */
+  .error-msg {
+    background: rgba(239,68,68,0.1);
+    border: 1px solid rgba(239,68,68,0.3);
+    color: #fca5a5;
+    padding: 12px;
+    border-radius: 8px;
+    margin-top: 1rem;
+    font-size: 0.9rem;
+    display: none;
+  }
+
+  /* API KEY INPUT */
+  .api-key-bar {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 0.8rem 1rem;
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+  .api-key-bar label { font-size: 0.82rem; color: var(--muted); white-space: nowrap; }
+  .api-key-bar input {
+    flex: 1;
+    min-width: 200px;
+    background: transparent;
+    border: none;
+    outline: none;
+    color: var(--text);
+    font-family: var(--font-body);
+    font-size: 0.85rem;
+  }
+  .api-key-bar input::placeholder { color: var(--muted); }
+
+  /* ANALYSE BUTTON */
+  #analyzeBtn {
+    width: 100%;
+    margin-top: 1rem;
+    padding: 14px;
+    font-size: 1rem;
+    font-weight: 700;
+    border-radius: 12px;
+    border: none;
+    background: var(--green-bright);
+    color: #000;
+    cursor: pointer;
+    font-family: var(--font-head);
+    letter-spacing: 0.3px;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+  }
+  #analyzeBtn:hover:not(:disabled) { background: var(--green-glow); transform: translateY(-1px); }
+  #analyzeBtn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+
+  /* RESULT PANEL */
+  #resultPanel {
+    margin-top: 1.5rem;
+    display: none;
+  }
+  .result-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+    margin-bottom: 1.2rem;
+    padding-bottom: 1.2rem;
+    border-bottom: 1px solid var(--border);
+  }
+  .result-badge {
+    padding: 6px 14px;
+    border-radius: 100px;
+    font-size: 0.8rem;
+    font-weight: 700;
+    font-family: var(--font-head);
+    white-space: nowrap;
+  }
+  .result-badge.is-waste { background: rgba(239,68,68,0.15); color: #fca5a5; border: 1px solid rgba(239,68,68,0.3); }
+  .result-badge.not-waste { background: rgba(34,197,94,0.15); color: var(--green-pale); border: 1px solid rgba(34,197,94,0.3); }
+  .result-type {
+    font-family: var(--font-head);
+    font-size: 1.4rem;
+    font-weight: 800;
+    color: #fff;
+  }
+  .result-confidence { font-size: 0.82rem; color: var(--muted); margin-top: 2px; }
+
+  .result-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-bottom: 1.2rem;
+  }
+  @media(max-width: 500px) { .result-grid { grid-template-columns: 1fr; } }
+  .result-card {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1rem;
+  }
+  .result-card-label {
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--muted);
+    margin-bottom: 0.4rem;
+  }
+  .result-card-value { font-size: 0.92rem; color: var(--text); line-height: 1.5; }
+
+  .disposal-steps { list-style: none; }
+  .disposal-steps li {
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+    padding: 0.7rem 0;
+    border-bottom: 1px solid var(--border);
+    font-size: 0.9rem;
+  }
+  .disposal-steps li:last-child { border-bottom: none; }
+  .step-num {
+    min-width: 24px; height: 24px;
+    background: rgba(34,197,94,0.15);
+    color: var(--green-bright);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.72rem;
+    font-weight: 700;
+  }
+  .hazard-tag {
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 6px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    margin: 2px;
+  }
+  .hazard-high { background: rgba(239,68,68,0.15); color: #fca5a5; }
+  .hazard-med { background: rgba(245,158,11,0.15); color: #fcd34d; }
+  .hazard-low { background: rgba(34,197,94,0.12); color: var(--green-pale); }
+
+  /* LOADING ANIMATION */
+  .loading {
+    text-align: center;
+    padding: 2rem;
+    display: none;
+  }
+  .loading-dots {
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+    margin-bottom: 1rem;
+  }
+  .dot {
+    width: 10px; height: 10px;
+    background: var(--green-bright);
+    border-radius: 50%;
+    animation: bounce 1.2s ease-in-out infinite;
+  }
+  .dot:nth-child(2) { animation-delay: 0.2s; }
+  .dot:nth-child(3) { animation-delay: 0.4s; }
+  @keyframes bounce {
+    0%, 80%, 100% { transform: scale(0.6); opacity: 0.4; }
+    40% { transform: scale(1); opacity: 1; }
+  }
+  .loading-text { color: var(--muted); font-size: 0.9rem; }
+
+  /* ── RECYCLING MAP ── */
+  #mapSection {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: clamp(1.5rem,4vw,2.5rem);
+    max-width: 840px;
+    margin: 0 auto;
+  }
+  .map-controls {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 1.2rem;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+  .map-controls select {
+    flex: 1;
+    min-width: 160px;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    color: var(--text);
+    padding: 10px 14px;
+    border-radius: 8px;
+    font-family: var(--font-body);
+    font-size: 0.88rem;
+    outline: none;
+    cursor: pointer;
+  }
+  .map-controls select:focus { border-color: var(--green-bright); }
+  #locateBtn {
+    padding: 10px 20px;
+    background: var(--green-bright);
+    color: #000;
+    border: none;
+    border-radius: 8px;
+    font-weight: 700;
+    font-family: var(--font-body);
+    font-size: 0.88rem;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  #locateBtn:hover { background: var(--green-glow); }
+  #mapFrame {
+    width: 100%;
+    height: 380px;
+    border-radius: 12px;
+    border: 1px solid var(--border);
+    display: none;
+  }
+  .map-placeholder {
+    height: 200px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    border: 2px dashed var(--border);
+    border-radius: 12px;
+    color: var(--muted);
+    font-size: 0.9rem;
+  }
+  #locationStatus {
+    font-size: 0.83rem;
+    color: var(--muted);
+    margin-top: 0.7rem;
+    min-height: 20px;
+  }
+  .centre-list { margin-top: 1rem; display: none; }
+  .centre-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 0.8rem 0;
+    border-bottom: 1px solid var(--border);
+    font-size: 0.88rem;
+  }
+  .centre-item:last-child { border-bottom: none; }
+  .centre-pin {
+    min-width: 28px; height: 28px;
+    background: rgba(34,197,94,0.12);
+    border: 1px solid rgba(34,197,94,0.3);
+    color: var(--green-bright);
+    border-radius: 6px;
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 700;
+    font-size: 0.8rem;
+  }
+  .centre-name { font-weight: 600; color: #fff; }
+  .centre-dist { color: var(--muted); font-size: 0.8rem; }
+
+  /* ── TIPS GRID ── */
+  .tips-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 16px;
+  }
+  .tip-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 1.3rem;
+    transition: all 0.25s;
+  }
+  .tip-card:hover { border-color: var(--green-bright); }
+  .tip-icon { font-size: 1.8rem; margin-bottom: 0.7rem; }
+  .tip-title { font-family: var(--font-head); font-weight: 700; color: #fff; margin-bottom: 0.4rem; font-size: 0.95rem; }
+  .tip-text { font-size: 0.85rem; color: var(--muted); line-height: 1.5; }
+
+  /* ── FOOTER ── */
+  footer {
+    border-top: 1px solid var(--border);
+    padding: 2rem clamp(1rem,5vw,4rem);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    color: var(--muted);
+    font-size: 0.83rem;
+    gap: 1rem;
+    position: relative;
+    z-index: 1;
+    background: rgba(5,15,8,0.5);
+    backdrop-filter: blur(10px);
+    margin-top: 4rem;
+  }
+  footer a { color: var(--green-bright); text-decoration: none; transition: color 0.3s ease; }
+  footer a:hover { color: var(--green-glow); }
+  footer strong { color: var(--green-bright); }
+
+  /* ── METRIC CARDS ── */
+  .metric-card {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1.5rem;
+    text-align: center;
+    transition: all 0.3s ease;
+  }
+  .metric-card:hover {
+    border-color: var(--green-bright);
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-glow);
+  }
+  .metric-icon { font-size: 2rem; margin-bottom: 0.5rem; }
+  .metric-value {
+    font-family: var(--font-head);
+    font-size: 2rem;
+    font-weight: 800;
+    color: var(--green-bright);
+    margin-bottom: 0.3rem;
+  }
+  .metric-label { font-size: 0.8rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; }
+
+  /* ── CALCULATOR BUTTONS ── */
+  .calc-btn {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    color: var(--text);
+    padding: 12px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-family: var(--font-body);
+    font-weight: 500;
+    transition: all 0.3s ease;
+  }
+  .calc-btn:hover {
+    border-color: var(--green-bright);
+    background: rgba(34,197,94,0.1);
+    transform: translateY(-2px);
+  }
+  .calc-btn.active {
+    background: var(--gradient-primary);
+    color: #000;
+    border-color: var(--green-bright);
+  }
+
+  /* ── COMMUNITY TIPS ── */
+  .community-tip {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1rem;
+    margin-bottom: 1rem;
+    transition: all 0.3s ease;
+  }
+  .community-tip:hover {
+    border-color: var(--green-bright);
+  }
+  .tip-author {
+    font-weight: 600;
+    color: var(--green-bright);
+    margin-bottom: 0.5rem;
+    font-size: 0.9rem;
+  }
+  .tip-content {
+    color: var(--text);
+    margin-bottom: 0.8rem;
+    line-height: 1.5;
+  }
+  .tip-actions {
+    display: flex;
+    gap: 10px;
+  }
+  .like-btn {
+    background: rgba(34,197,94,0.1);
+    border: 1px solid rgba(34,197,94,0.3);
+    color: var(--green-pale);
+    padding: 4px 12px;
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 0.8rem;
+    transition: all 0.3s ease;
+  }
+  .like-btn:hover {
+    background: rgba(34,197,94,0.2);
+    transform: scale(1.05);
+  }
+
+  /* ── MARKETPLACE LISTINGS ── */
+  .marketplace-listing {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1rem;
+    margin-bottom: 1rem;
+    transition: all 0.3s ease;
+  }
+  .marketplace-listing:hover {
+    border-color: var(--green-bright);
+    transform: translateY(-2px);
+  }
+  .listing-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: start;
+    margin-bottom: 0.5rem;
+  }
+  .listing-title {
+    color: #fff;
+    font-weight: 600;
+  }
+  .listing-price {
+    color: var(--green-bright);
+    font-weight: 600;
+    font-size: 1.1rem;
+  }
+  .listing-details {
+    color: var(--muted);
+    font-size: 0.9rem;
+    margin-bottom: 0.5rem;
+  }
+  .listing-description {
+    color: var(--text);
+    font-size: 0.9rem;
+    margin-bottom: 0.8rem;
+  }
+  .listing-actions {
+    display: flex;
+    gap: 0.5rem;
+  }
+  .btn-contact {
+    background: var(--gradient-primary);
+    color: #000;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.8rem;
+    font-weight: 600;
+    transition: all 0.3s ease;
+  }
+  .btn-contact:hover {
+    transform: scale(1.05);
+  }
+  .btn-remove {
+    background: rgba(239,68,68,0.1);
+    border: 1px solid rgba(239,68,68,0.3);
+    color: #fca5a5;
+    padding: 6px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.8rem;
+    transition: all 0.3s ease;
+  }
+  .btn-remove:hover {
+    background: rgba(239,68,68,0.2);
+  }
+
+  /* ── GAMIFICATION BADGES ── */
+  .badge-item {
+    text-align: center;
+    padding: 1rem;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    transition: all 0.3s ease;
+  }
+  .badge-item:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-glow);
+  }
+  .badge-icon {
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+  }
+  .badge-name {
+    color: #fff;
+    font-size: 0.8rem;
+    font-weight: 600;
+  }
+  .badge-desc {
+    color: var(--muted);
+    font-size: 0.7rem;
+    margin-top: 0.3rem;
+  }
+
+  /* ── CHALLENGE CARDS ── */
+  .challenge-card {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1rem;
+    margin-bottom: 1rem;
+    transition: all 0.3s ease;
+  }
+  .challenge-card:hover {
+    border-color: var(--green-bright);
+  }
+  .challenge-header {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 0.5rem;
+  }
+  .challenge-icon {
+    font-size: 1.2rem;
+  }
+  .challenge-title {
+    color: #fff;
+    font-weight: 600;
+  }
+  .challenge-desc {
+    color: var(--text);
+    margin-bottom: 0.8rem;
+    line-height: 1.4;
+  }
+  .btn-join {
+    background: rgba(34,197,94,0.1);
+    border: 1px solid rgba(34,197,94,0.3);
+    color: var(--green-pale);
+    padding: 4px 12px;
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 0.8rem;
+    transition: all 0.3s ease;
+  }
+  .btn-join:hover {
+    background: rgba(34,197,94,0.2);
+    transform: scale(1.05);
+  }
+
+  /* ── EMERGENCY REPORT FORM ── */
+  .report-form {
+    display: grid;
+    gap: 1rem;
+  }
+  .report-field {
+    display: grid;
+    gap: 0.5rem;
+  }
+  .report-label {
+    color: var(--muted);
+    font-size: 0.9rem;
+    font-weight: 500;
+  }
+  .report-input, .report-textarea, .report-select {
+    width: 100%;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    color: var(--text);
+    padding: 12px;
+    border-radius: 8px;
+    font-family: var(--font-body);
+    font-size: 0.9rem;
+    outline: none;
+    transition: border-color 0.3s ease;
+  }
+  .report-input:focus, .report-textarea:focus, .report-select:focus {
+    border-color: var(--green-bright);
+  }
+  .report-textarea {
+    min-height: 120px;
+    resize: vertical;
+  }
+  .location-row {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 1rem;
+    align-items: end;
+  }
+  .btn-location {
+    background: rgba(59,130,246,0.1);
+    border: 1px solid rgba(59,130,246,0.3);
+    color: var(--blue);
+    padding: 12px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-family: var(--font-body);
+    transition: all 0.3s ease;
+    white-space: nowrap;
+  }
+  .btn-location:hover {
+    background: rgba(59,130,246,0.2);
+    transform: translateY(-1px);
+  }
+  .btn-submit-report {
+    background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+    color: #fff;
+    border: none;
+    padding: 14px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+    font-family: var(--font-body);
+    font-size: 1rem;
+    width: 100%;
+    transition: all 0.3s ease;
+  }
+  .btn-submit-report:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 20px rgba(239,68,68,0.3);
+  }
+  .report-status {
+    text-align: center;
+    padding: 1rem;
+    border-radius: 8px;
+    font-weight: 500;
+    min-height: 20px;
+  }
+  .report-success {
+    background: rgba(34,197,94,0.1);
+    color: var(--green-bright);
+  }
+  .report-error {
+    background: rgba(239,68,68,0.1);
+    color: #fca5a5;
+  }
+
+  /* ── SCROLL PROGRESS ── */
+  .scroll-progress {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 3px;
+    background: rgba(34,197,94,0.2);
+    z-index: 1000;
+  }
+  .scroll-progress-bar {
+    height: 100%;
+    background: var(--gradient-primary);
+    width: 0%;
+    transition: width 0.1s ease;
+  }
+</style>
+</head>
+<body>
+
+<!-- SCROLL PROGRESS -->
+<div class="scroll-progress">
+  <div class="scroll-progress-bar" id="scrollProgressBar"></div>
+</div>
+
+<!-- NAV -->
+<nav>
+  <a href="#" class="logo">
+    <div class="logo-icon">♻</div>
+    WasteWise AI
+  </a>
+  <ul>
+    <li><a href="#detect">Detect</a></li>
+    <li><a href="#waste-types">Waste Types</a></li>
+    <li><a href="#dashboard">Dashboard</a></li>
+    <li><a href="#calculator">Calculator</a></li>
+    <li><a href="#scheduler">Scheduler</a></li>
+    <li><a href="#bulk-analysis">Bulk Analysis</a></li>
+    <li><a href="#marketplace">Marketplace</a></li>
+    <li><a href="#gamification">Rewards</a></li>
+    <li><a href="#audit">Audit Tool</a></li>
+    <li><a href="#recycling">Find Centre</a></li>
+    <li><a href="#emergency">Report</a></li>
+    <li><a href="#tips">Tips</a></li>
+    <li><a href="#detect" class="nav-cta">Scan Waste</a></li>
+  </ul>
+</nav>
+
+<main>
+
+  <!-- HERO -->
+  <div class="hero">
+    <div class="hero-badge">🌱 UN SDG Goal 12 · Responsible Consumption</div>
+    <h1>Identify. Segregate.<br><span>Dispose Responsibly.</span></h1>
+    <p>Snap a photo of any waste — our AI instantly identifies the type, hazard level, and gives you step-by-step disposal guidance. Protecting Mumbai and the planet, one scan at a time.</p>
+    <div class="hero-btns">
+      <a href="#detect" class="btn-primary">🔍 Scan Waste Now</a>
+      <a href="#bulk-analysis" class="btn-secondary">📦 Bulk Analysis</a>
+      <a href="#scheduler" class="btn-secondary">📅 Schedule Pickup</a>
+      <a href="#marketplace" class="btn-secondary">💰 Recycling Marketplace</a>
+      <a href="#gamification" class="btn-secondary">⭐ Waste Warrior</a>
+      <a href="#audit" class="btn-secondary">📋 Waste Audit</a>
+      <a href="#dashboard" class="btn-secondary">📊 View Dashboard</a>
+      <a href="#calculator" class="btn-secondary">🧮 Impact Calculator</a>
+      <a href="#recycling" class="btn-secondary">📍 Find Recycling Centre</a>
+    </div>
+  </div>
+
+  <!-- STATS -->
+  <div class="stats-strip">
+    <div class="stat">
+      <div class="stat-num">62M</div>
+      <div class="stat-label">Tonnes of waste India generates yearly</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num">6</div>
+      <div class="stat-label">Waste categories detected by AI</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num">SDG 12</div>
+      <div class="stat-label">Responsible consumption goal</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num">95%+</div>
+      <div class="stat-label">AI classification accuracy</div>
+    </div>
+  </div>
+
+  <!-- WASTE TYPES -->
+  <section id="waste-types">
+    <div class="section-label">Waste Categories</div>
+    <h2 class="section-title">6 Types of Urban Waste</h2>
+    <p class="section-sub">Urban areas generate diverse waste streams — each requiring different handling, segregation, and disposal approaches.</p>
+    <div class="waste-grid">
+      <div class="waste-card">
+        <span class="waste-icon">🍂</span>
+        <div class="waste-name">Solid / Organic</div>
+        <div class="waste-desc">Food scraps, garden waste, biodegradable materials</div>
+      </div>
+      <div class="waste-card">
+        <span class="waste-icon">🧴</span>
+        <div class="waste-name">Plastic</div>
+        <div class="waste-desc">PET bottles, bags, packaging, microplastics</div>
+      </div>
+      <div class="waste-card">
+        <span class="waste-icon">🔩</span>
+        <div class="waste-name">Metal</div>
+        <div class="waste-desc">Aluminium cans, steel scrap, copper wires</div>
+      </div>
+      <div class="waste-card">
+        <span class="waste-icon">💊</span>
+        <div class="waste-name">Medical / Biomedical</div>
+        <div class="waste-desc">Syringes, bandages, pharmaceuticals, lab waste</div>
+      </div>
+      <div class="waste-card">
+        <span class="waste-icon">📱</span>
+        <div class="waste-name">Electronic (E-waste)</div>
+        <div class="waste-desc">Phones, batteries, circuit boards, chargers</div>
+      </div>
+      <div class="waste-card">
+        <span class="waste-icon">☢️</span>
+        <div class="waste-name">Hazardous</div>
+        <div class="waste-desc">Chemicals, paints, batteries, solvents, asbestos</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SCANNER -->
+  <section id="detect">
+    <div class="section-label">AI Waste Scanner</div>
+    <h2 class="section-title">Scan & Identify Waste</h2>
+    <p class="section-sub">Upload an image or use your camera. Our AI powered by Claude Vision will identify the waste type and guide you on disposal.</p>
+
+    <div id="scanner">
+
+      <!-- OPENROUTER FREE KEY -->
+      <div style="background:rgba(34,197,94,0.07);border:1px solid rgba(34,197,94,0.25);border-radius:12px;padding:1rem 1.1rem;margin-bottom:1rem;">
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:0.5rem;">
+          <span style="font-size:1rem;">🤖</span>
+          <span style="font-weight:700;color:#fff;font-size:0.9rem;">Free OpenRouter API Key</span>
+          <span style="background:rgba(34,197,94,0.2);color:var(--green-bright);font-size:0.7rem;font-weight:700;padding:2px 8px;border-radius:6px;letter-spacing:0.5px;">100% FREE · NO BILLING</span>
+        </div>
+        <ol style="font-size:0.82rem;color:var(--muted);margin-bottom:0.7rem;padding-left:1.2rem;line-height:2.2;">
+          <li>Go to <a href="https://openrouter.ai/keys" target="_blank" style="color:var(--green-bright);font-weight:600;">openrouter.ai/keys</a> &mdash; Sign up free (Google login works)</li>
+          <li>Click <strong style="color:#fff;">Create Key</strong> &rarr; copy the key (starts with <code style="color:var(--green-bright);">sk-or-</code>)</li>
+          <li>Paste it below &rarr; click Save &mdash; free models, no credit card ever</li>
+        </ol>
+        <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
+          <input type="password" id="apiKeyInput" placeholder="sk-or-v1-..." autocomplete="off"
+            style="flex:1;min-width:220px;background:var(--bg);border:1px solid var(--border);color:var(--text);padding:9px 12px;border-radius:8px;font-family:var(--font-body);font-size:0.85rem;outline:none;">
+          <button id="saveKeyBtn" onclick="saveKey()" style="background:var(--green-bright);color:#000;border:none;padding:9px 16px;border-radius:8px;font-weight:700;font-size:0.82rem;cursor:pointer;white-space:nowrap;font-family:var(--font-body);">Save</button>
+        </div>
+        <div id="keyStatus" style="font-size:0.78rem;color:var(--muted);margin-top:0.4rem;min-height:16px;"></div>
+      </div>
+
+      <!-- TABS -->
+      <div class="scanner-tabs">
+        <button class="tab-btn active" onclick="switchTab('upload')" id="tabUpload">📁 Upload Image</button>
+        <button class="tab-btn" onclick="switchTab('camera')" id="tabCamera">📷 Live Camera</button>
+      </div>
+
+      <!-- UPLOAD PANEL -->
+      <div id="panelUpload">
+        <div class="upload-zone" id="dropZone">
+          <input type="file" id="fileInput" accept="image/*" onchange="onFileSelect(event)">
+          <span class="upload-icon">🖼️</span>
+          <div class="upload-text">Drop image here or click to browse</div>
+          <div class="upload-hint">JPG, PNG, WEBP · Max 10MB</div>
+        </div>
+        <img id="previewImg" alt="Selected waste image">
+      </div>
+
+      <!-- CAMERA PANEL -->
+      <div id="panelCamera" style="display:none;">
+        <div class="camera-placeholder" id="cameraPlaceholder">
+          <span style="font-size:2.5rem;">📷</span>
+          <div style="color:var(--text);font-weight:600;">Camera not started</div>
+          <div style="font-size:0.83rem;color:var(--muted);">Works on laptop and mobile browsers</div>
+        </div>
+        <video id="cameraFeed" autoplay playsinline muted></video>
+        <div class="camera-controls">
+          <button class="btn-primary" onclick="startCamera()" id="startCamBtn" style="flex:1">📷 Start Camera</button>
+          <button class="btn-secondary" onclick="captureFrame()" id="captureBtn" style="flex:1;display:none">📸 Capture Frame</button>
+          <button class="btn-secondary" onclick="stopCamera()" id="stopCamBtn" style="flex:1;display:none">⏹ Stop</button>
+        </div>
+        <img id="capturedImg" alt="Captured frame" style="width:100%;max-height:280px;object-fit:contain;border-radius:12px;border:1px solid var(--border);display:none;margin-top:0.8rem;background:#000;">
+        <canvas id="captureCanvas" style="display:none;"></canvas>
+      </div>
+
+      <!-- ERROR -->
+      <div class="error-msg" id="errorMsg"></div>
+
+      <!-- ANALYZE BUTTON -->
+      <button id="analyzeBtn" onclick="analyzeWaste()">
+        🔍 Analyse Waste
+      </button>
+
+      <!-- LOADING -->
+      <div class="loading" id="loadingPanel">
+        <div class="loading-dots">
+          <div class="dot"></div>
+          <div class="dot"></div>
+          <div class="dot"></div>
+        </div>
+        <div class="loading-text" id="loadingText">Sending image to Claude AI…</div>
+      </div>
+
+      <!-- RESULT -->
+      <div id="resultPanel">
+        <div class="result-header">
+          <div style="flex:1">
+            <div style="margin-bottom:6px;">
+              <span class="result-badge" id="resultBadge">Waste Detected</span>
+            </div>
+            <div class="result-type" id="resultType">—</div>
+            <div class="result-confidence" id="resultConfidence"></div>
+          </div>
+          <div style="font-size:3rem;" id="resultEmoji">♻️</div>
+        </div>
+
+        <div class="result-grid">
+          <div class="result-card">
+            <div class="result-card-label">Hazard Level</div>
+            <div class="result-card-value" id="resultHazard">—</div>
+          </div>
+          <div class="result-card">
+            <div class="result-card-label">Recyclable</div>
+            <div class="result-card-value" id="resultRecyclable">—</div>
+          </div>
+          <div class="result-card">
+            <div class="result-card-label">Description</div>
+            <div class="result-card-value" id="resultDesc">—</div>
+          </div>
+          <div class="result-card">
+            <div class="result-card-label">Bin Colour</div>
+            <div class="result-card-value" id="resultBin">—</div>
+          </div>
+        </div>
+
+        <div style="background:var(--bg);border:1px solid var(--border);border-radius:12px;padding:1rem;margin-bottom:1rem;">
+          <div class="result-card-label" style="margin-bottom:0.7rem;">♻️ Disposal Steps</div>
+          <ol class="disposal-steps" id="disposalSteps"></ol>
+        </div>
+
+        <div style="background:rgba(34,197,94,0.06);border:1px solid rgba(34,197,94,0.2);border-radius:12px;padding:1rem;">
+          <div class="result-card-label" style="margin-bottom:0.5rem;">🌍 Environmental Impact</div>
+          <div style="font-size:0.88rem;color:var(--text);" id="resultImpact">—</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- RECYCLING CENTRES -->
+  <section id="recycling">
+    <div class="section-label">Find Nearby</div>
+    <h2 class="section-title">Recycling Centres Near You</h2>
+    <p class="section-sub">Locate the nearest waste collection and recycling points using your browser's location.</p>
+
+    <div id="mapSection">
+      <div class="map-controls">
+        <select id="wasteTypeFilter">
+          <option value="recycling">All Recycling Centres</option>
+          <option value="ewaste">E-Waste Collection</option>
+          <option value="hazardous waste">Hazardous Waste Disposal</option>
+          <option value="plastic recycling">Plastic Recycling</option>
+          <option value="scrap metal">Scrap Metal</option>
+          <option value="biomedical waste">Biomedical Waste</option>
+        </select>
+        <button id="locateBtn" onclick="findCentres()">📍 Use My Location</button>
+      </div>
+
+      <div class="map-placeholder" id="mapPlaceholder">
+        <span style="font-size:2rem;">🗺️</span>
+        <span>Click "Use My Location" to find centres near you</span>
+        <span style="font-size:0.75rem;">Requires location permission · Opens in OpenStreetMap</span>
+      </div>
+
+      <iframe id="mapFrame" title="Recycling centres map" allowfullscreen="" loading="lazy"></iframe>
+      <div id="locationStatus"></div>
+
+      <div class="centre-list" id="centreList">
+        <div style="font-size:0.8rem;color:var(--muted);margin-bottom:0.8rem;text-transform:uppercase;letter-spacing:1px;font-weight:600;">Nearest Centres</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- WASTE COLLECTION SCHEDULER -->
+  <section id="scheduler">
+    <div class="section-label">Smart Scheduling</div>
+    <h2 class="section-title">Waste Collection Scheduler</h2>
+    <p class="section-sub">Schedule waste pickups, track collection history, and get reminders for optimal waste management.</p>
+
+    <div style="background: var(--surface); border: 1px solid var(--border); border-radius: 20px; padding: clamp(1.5rem,4vw,2.5rem); max-width: 1000px; margin: 0 auto;">
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-bottom: 2rem;">
+        <div>
+          <h3 style="color: #fff; font-family: var(--font-head); font-size: 1.2rem; margin-bottom: 1rem;">Schedule New Pickup</h3>
+          <div style="display: grid; gap: 1rem;">
+            <select id="wasteCategory" style="width: 100%; background: var(--bg); border: 1px solid var(--border); color: var(--text); padding: 12px; border-radius: 8px; font-family: var(--font-body);">
+              <option value="organic">Organic Waste</option>
+              <option value="recyclable">Recyclable Waste</option>
+              <option value="hazardous">Hazardous Waste</option>
+              <option value="ewaste">E-Waste</option>
+              <option value="mixed">Mixed Waste</option>
+            </select>
+            <input type="date" id="pickupDate" style="width: 100%; background: var(--bg); border: 1px solid var(--border); color: var(--text); padding: 12px; border-radius: 8px; font-family: var(--font-body);">
+            <select id="pickupTime" style="width: 100%; background: var(--bg); border: 1px solid var(--border); color: var(--text); padding: 12px; border-radius: 8px; font-family: var(--font-body);">
+              <option value="morning">Morning (8-12 PM)</option>
+              <option value="afternoon">Afternoon (12-4 PM)</option>
+              <option value="evening">Evening (4-8 PM)</option>
+            </select>
+            <input type="number" id="wasteQuantity" placeholder="Estimated quantity (kg)" min="1" style="width: 100%; background: var(--bg); border: 1px solid var(--border); color: var(--text); padding: 12px; border-radius: 8px; font-family: var(--font-body);">
+            <button id="schedulePickupBtn" onclick="schedulePickup()" style="background: var(--gradient-primary); color: #000; border: none; padding: 12px; border-radius: 8px; cursor: pointer; font-weight: 600; font-family: var(--font-body);">Schedule Pickup</button>
+          </div>
+        </div>
+        <div>
+          <h3 style="color: #fff; font-family: var(--font-head); font-size: 1.2rem; margin-bottom: 1rem;">Upcoming Pickups</h3>
+          <div id="upcomingPickups" style="max-height: 300px; overflow-y: auto;">
+            <div style="text-align: center; color: var(--muted); padding: 2rem;">No scheduled pickups</div>
+          </div>
+        </div>
+      </div>
+
+      <div style="border-top: 1px solid var(--border); padding-top: 2rem;">
+        <h3 style="color: #fff; font-family: var(--font-head); font-size: 1.2rem; margin-bottom: 1rem;">Collection History</h3>
+        <div id="collectionHistory" style="max-height: 200px; overflow-y: auto;">
+          <div style="text-align: center; color: var(--muted); padding: 1rem;">No collection history</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- BULK WASTE ANALYSIS -->
+  <section id="bulk-analysis">
+    <div class="section-label">Batch Processing</div>
+    <h2 class="section-title">Bulk Waste Analysis</h2>
+    <p class="section-sub">Upload multiple waste images for batch analysis and comprehensive waste assessment reports.</p>
+
+    <div style="background: var(--surface); border: 1px solid var(--border); border-radius: 20px; padding: clamp(1.5rem,4vw,2.5rem); max-width: 1000px; margin: 0 auto;">
+      <div style="margin-bottom: 2rem;">
+        <div class="upload-zone" id="bulkDropZone">
+          <input type="file" id="bulkFileInput" accept="image/*" multiple onchange="onBulkFileSelect(event)">
+          <span class="upload-icon">📦</span>
+          <div class="upload-text">Drop multiple images here or click to browse</div>
+          <div class="upload-hint">JPG, PNG, WEBP · Max 10MB each · Up to 10 images</div>
+        </div>
+        <div id="bulkPreview" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap: 1rem; margin-top: 1rem;"></div>
+      </div>
+
+      <div style="display: flex; gap: 1rem; justify-content: center; margin-bottom: 2rem;">
+        <button id="analyzeBulkBtn" onclick="analyzeBulkWaste()" style="background: var(--gradient-primary); color: #000; border: none; padding: 14px 28px; border-radius: 10px; cursor: pointer; font-weight: 600; font-family: var(--font-body);">Analyze All Images</button>
+        <button id="clearBulkBtn" onclick="clearBulkImages()" style="background: transparent; color: var(--text); border: 1px solid var(--border); padding: 13px 28px; border-radius: 10px; cursor: pointer; font-weight: 500; font-family: var(--font-body);">Clear All</button>
+      </div>
+
+      <div id="bulkResults" style="display: none;">
+        <h3 style="color: #fff; font-family: var(--font-head); font-size: 1.2rem; margin-bottom: 1rem;">Batch Analysis Results</h3>
+        <div id="bulkSummary" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 1rem; margin-bottom: 2rem;"></div>
+        <div id="bulkDetails"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- RECYCLING MARKETPLACE -->
+  <section id="marketplace">
+    <div class="section-label">Circular Economy</div>
+    <h2 class="section-title">Recycling Marketplace</h2>
+    <p class="section-sub">Buy and sell recyclable materials, connect with local recyclers, and contribute to the circular economy.</p>
+
+    <div style="background: var(--surface); border: 1px solid var(--border); border-radius: 20px; padding: clamp(1.5rem,4vw,2.5rem); max-width: 1000px; margin: 0 auto;">
+      <div style="display: grid; grid-template-columns: 1fr 2fr; gap: 2rem;">
+        <div>
+          <h3 style="color: #fff; font-family: var(--font-head); font-size: 1.2rem; margin-bottom: 1rem;">List Your Recyclables</h3>
+          <div style="display: grid; gap: 1rem;">
+            <select id="materialType" style="width: 100%; background: var(--bg); border: 1px solid var(--border); color: var(--text); padding: 12px; border-radius: 8px; font-family: var(--font-body);">
+              <option value="plastic">Plastic</option>
+              <option value="paper">Paper/Cardboard</option>
+              <option value="metal">Metal</option>
+              <option value="glass">Glass</option>
+              <option value="ewaste">E-Waste</option>
+            </select>
+            <input type="number" id="materialQuantity" placeholder="Quantity (kg)" min="1" style="width: 100%; background: var(--bg); border: 1px solid var(--border); color: var(--text); padding: 12px; border-radius: 8px; font-family: var(--font-body);">
+            <input type="number" id="materialPrice" placeholder="Expected price per kg (₹)" min="0" step="0.01" style="width: 100%; background: var(--bg); border: 1px solid var(--border); color: var(--text); padding: 12px; border-radius: 8px; font-family: var(--font-body);">
+            <textarea id="materialDescription" placeholder="Describe your recyclables..." style="width: 100%; min-height: 80px; background: var(--bg); border: 1px solid var(--border); color: var(--text); padding: 12px; border-radius: 8px; font-family: var(--font-body); resize: vertical;"></textarea>
+            <button id="listMaterialBtn" onclick="listMaterial()" style="background: var(--gradient-primary); color: #000; border: none; padding: 12px; border-radius: 8px; cursor: pointer; font-weight: 600; font-family: var(--font-body);">List for Sale</button>
+          </div>
+        </div>
+        <div>
+          <h3 style="color: #fff; font-family: var(--font-head); font-size: 1.2rem; margin-bottom: 1rem;">Available Materials</h3>
+          <div id="marketplaceListings" style="max-height: 400px; overflow-y: auto;">
+            <div style="text-align: center; color: var(--muted); padding: 2rem;">No listings available</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- GAMIFICATION & REWARDS -->
+  <section id="gamification">
+    <div class="section-label">Earn & Learn</div>
+    <h2 class="section-title">Waste Warrior Program</h2>
+    <p class="section-sub">Earn points, unlock badges, and compete with others in waste reduction challenges.</p>
+
+    <div style="background: var(--surface); border: 1px solid var(--border); border-radius: 20px; padding: clamp(1.5rem,4vw,2.5rem); max-width: 1000px; margin: 0 auto;">
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 2rem; margin-bottom: 2rem;">
+        <div class="metric-card">
+          <div class="metric-icon">⭐</div>
+          <div class="metric-value" id="userPoints">0</div>
+          <div class="metric-label">Waste Warrior Points</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-icon">🏆</div>
+          <div class="metric-value" id="userLevel">1</div>
+          <div class="metric-label">Current Level</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-icon">🎯</div>
+          <div class="metric-value" id="currentStreak">0</div>
+          <div class="metric-label">Day Streak</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-icon">👥</div>
+          <div class="metric-value" id="leaderboardRank">-</div>
+          <div class="metric-label">Global Rank</div>
+        </div>
+      </div>
+
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem;">
+        <div>
+          <h3 style="color: #fff; font-family: var(--font-head); font-size: 1.2rem; margin-bottom: 1rem;">Your Badges</h3>
+          <div id="userBadges" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(80px, 1fr)); gap: 1rem;">
+            <div style="text-align: center; color: var(--muted); font-size: 0.9rem;">No badges yet</div>
+          </div>
+        </div>
+        <div>
+          <h3 style="color: #fff; font-family: var(--font-head); font-size: 1.2rem; margin-bottom: 1rem;">Active Challenges</h3>
+          <div id="activeChallenges">
+            <div class="community-tip" style="margin-bottom: 1rem;">
+              <div class="tip-author">🌱 Zero Waste Week</div>
+              <div class="tip-content">Go zero waste for 7 days. Earn 500 points!</div>
+              <div class="tip-actions">
+                <button onclick="joinChallenge('zero-waste-week')" class="like-btn">Join Challenge</button>
+              </div>
+            </div>
+            <div class="community-tip" style="margin-bottom: 1rem;">
+              <div class="tip-author">♻️ Recycling Master</div>
+              <div class="tip-content">Recycle 20 items this month. Earn 300 points!</div>
+              <div class="tip-actions">
+                <button onclick="joinChallenge('recycling-master')" class="like-btn">Join Challenge</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- EMERGENCY REPORTING -->
+  <section id="emergency">
+    <div class="section-label">Report Issues</div>
+    <h2 class="section-title">Emergency Waste Reporting</h2>
+    <p class="section-sub">Report illegal dumping, hazardous waste spills, or environmental violations in your area.</p>
+
+    <div style="background: var(--surface); border: 1px solid var(--border); border-radius: 20px; padding: clamp(1.5rem,4vw,2.5rem); max-width: 800px; margin: 0 auto;">
+      <div style="display: grid; gap: 1rem;">
+        <select id="reportType" style="width: 100%; background: var(--bg); border: 1px solid var(--border); color: var(--text); padding: 12px; border-radius: 8px; font-family: var(--font-body);">
+          <option value="illegal-dumping">Illegal Waste Dumping</option>
+          <option value="hazardous-spill">Hazardous Waste Spill</option>
+          <option value="open-burning">Open Burning of Waste</option>
+          <option value="sewage-overflow">Sewage/Industrial Waste in Water</option>
+          <option value="construction-waste">Illegal Construction Waste Disposal</option>
+          <option value="other">Other Environmental Violation</option>
+        </select>
+        <textarea id="reportDescription" placeholder="Describe the issue, location, and any additional details..." style="width: 100%; min-height: 120px; background: var(--bg); border: 1px solid var(--border); color: var(--text); padding: 12px; border-radius: 8px; font-family: var(--font-body); resize: vertical;"></textarea>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+          <input type="text" id="reportLocation" placeholder="Location (or use GPS)" style="width: 100%; background: var(--bg); border: 1px solid var(--border); color: var(--text); padding: 12px; border-radius: 8px; font-family: var(--font-body);">
+          <button id="getLocationBtn" onclick="getCurrentLocation()" style="background: rgba(59,130,246,0.1); border: 1px solid rgba(59,130,246,0.3); color: var(--blue); padding: 12px; border-radius: 8px; cursor: pointer; font-family: var(--font-body);">📍 Use Current Location</button>
+        </div>
+        <div class="upload-zone" id="reportDropZone" style="margin: 1rem 0;">
+          <input type="file" id="reportFileInput" accept="image/*" onchange="onReportFileSelect(event)">
+          <span class="upload-icon">📷</span>
+          <div class="upload-text">Add photo evidence (optional)</div>
+          <div class="upload-hint">JPG, PNG, WEBP · Max 10MB</div>
+        </div>
+        <img id="reportPreviewImg" alt="Report evidence" style="width: 100%; max-height: 200px; object-fit: contain; border-radius: 8px; border: 1px solid var(--border); display: none; margin-bottom: 1rem; background: #000;">
+        <button id="submitReportBtn" onclick="submitReport()" style="background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%); color: #fff; border: none; padding: 14px; border-radius: 8px; cursor: pointer; font-weight: 600; font-family: var(--font-body); width: 100%;">🚨 Submit Emergency Report</button>
+      </div>
+      <div id="reportStatus" style="margin-top: 1rem; text-align: center; color: var(--muted);"></div>
+    </div>
+  </section>
+
+  <!-- WASTE AUDIT TOOL -->
+  <section id="audit">
+    <div class="section-label">Business Tool</div>
+    <h2 class="section-title">Waste Audit Tool</h2>
+    <p class="section-sub">Comprehensive waste assessment for businesses, schools, and organizations to optimize waste management and reduce costs.</p>
+
+    <div style="background: var(--surface); border: 1px solid var(--border); border-radius: 20px; padding: clamp(1.5rem,4vw,2.5rem); max-width: 1000px; margin: 0 auto;">
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-bottom: 2rem;">
+        <div>
+          <h3 style="color: #fff; font-family: var(--font-head); font-size: 1.2rem; margin-bottom: 1rem;">Organization Details</h3>
+          <div style="display: grid; gap: 1rem;">
+            <input type="text" id="orgName" placeholder="Organization Name" style="width: 100%; background: var(--bg); border: 1px solid var(--border); color: var(--text); padding: 12px; border-radius: 8px; font-family: var(--font-body);">
+            <select id="orgType" style="width: 100%; background: var(--bg); border: 1px solid var(--border); color: var(--text); padding: 12px; border-radius: 8px; font-family: var(--font-body);">
+              <option value="business">Business/Office</option>
+              <option value="school">School/Educational</option>
+              <option value="hospital">Hospital/Healthcare</option>
+              <option value="restaurant">Restaurant/Food Service</option>
+              <option value="retail">Retail Store</option>
+              <option value="manufacturing">Manufacturing</option>
+              <option value="other">Other</option>
+            </select>
+            <input type="number" id="employeeCount" placeholder="Number of employees/people" min="1" style="width: 100%; background: var(--bg); border: 1px solid var(--border); color: var(--text); padding: 12px; border-radius: 8px; font-family: var(--font-body);">
+          </div>
+        </div>
+        <div>
+          <h3 style="color: #fff; font-family: var(--font-head); font-size: 1.2rem; margin-bottom: 1rem;">Waste Categories</h3>
+          <div style="display: grid; gap: 1rem;">
+            <div style="display: flex; gap: 0.5rem; align-items: center;">
+              <input type="number" id="paperWaste" placeholder="Paper/Cardboard (kg/week)" min="0" step="0.1" style="flex: 1; background: var(--bg); border: 1px solid var(--border); color: var(--text); padding: 10px; border-radius: 6px; font-family: var(--font-body);">
+              <span style="color: var(--muted); font-size: 0.8rem;">kg/wk</span>
+            </div>
+            <div style="display: flex; gap: 0.5rem; align-items: center;">
+              <input type="number" id="plasticWaste" placeholder="Plastic (kg/week)" min="0" step="0.1" style="flex: 1; background: var(--bg); border: 1px solid var(--border); color: var(--text); padding: 10px; border-radius: 6px; font-family: var(--font-body);">
+              <span style="color: var(--muted); font-size: 0.8rem;">kg/wk</span>
+            </div>
+            <div style="display: flex; gap: 0.5rem; align-items: center;">
+              <input type="number" id="organicWaste" placeholder="Organic/Food (kg/week)" min="0" step="0.1" style="flex: 1; background: var(--bg); border: 1px solid var(--border); color: var(--text); padding: 10px; border-radius: 6px; font-family: var(--font-body);">
+              <span style="color: var(--muted); font-size: 0.8rem;">kg/wk</span>
+            </div>
+            <div style="display: flex; gap: 0.5rem; align-items: center;">
+              <input type="number" id="ewasteAmount" placeholder="E-Waste (kg/week)" min="0" step="0.1" style="flex: 1; background: var(--bg); border: 1px solid var(--border); color: var(--text); padding: 10px; border-radius: 6px; font-family: var(--font-body);">
+              <span style="color: var(--muted); font-size: 0.8rem;">kg/wk</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div style="text-align: center; margin-bottom: 2rem;">
+        <button id="generateAuditBtn" onclick="generateAuditReport()" style="background: var(--gradient-primary); color: #000; border: none; padding: 14px 28px; border-radius: 10px; cursor: pointer; font-weight: 600; font-family: var(--font-body);">Generate Waste Audit Report</button>
+      </div>
+
+      <div id="auditReport" style="display: none;">
+        <h3 style="color: #fff; font-family: var(--font-head); font-size: 1.2rem; margin-bottom: 1rem;">Waste Audit Report</h3>
+        
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-bottom: 2rem;">
+          <div style="background: var(--bg); border: 1px solid var(--border); border-radius: 12px; padding: 1.5rem; text-align: center;">
+            <div style="font-size: 2rem; font-weight: 800; color: var(--green-bright); margin-bottom: 0.5rem;" id="totalWasteWeek">-</div>
+            <div style="color: var(--muted); font-size: 0.9rem;">Total Waste (kg/week)</div>
+          </div>
+          <div style="background: var(--bg); border: 1px solid var(--border); border-radius: 12px; padding: 1.5rem; text-align: center;">
+            <div style="font-size: 2rem; font-weight: 800; color: var(--blue); margin-bottom: 0.5rem;" id="wastePerPerson">-</div>
+            <div style="color: var(--muted); font-size: 0.9rem;">Waste per Person (kg/week)</div>
+          </div>
+          <div style="background: var(--bg); border: 1px solid var(--border); border-radius: 12px; padding: 1.5rem; text-align: center;">
+            <div style="font-size: 2rem; font-weight: 800; color: var(--amber); margin-bottom: 0.5rem;" id="recyclingPotential">-</div>
+            <div style="color: var(--muted); font-size: 0.9rem;">Recycling Potential (%)</div>
+          </div>
+          <div style="background: var(--bg); border: 1px solid var(--border); border-radius: 12px; padding: 1.5rem; text-align: center;">
+            <div style="font-size: 2rem; font-weight: 800; color: #ef4444; margin-bottom: 0.5rem;" id="costSavings">-</div>
+            <div style="color: var(--muted); font-size: 0.9rem;">Potential Annual Savings (₹)</div>
+          </div>
+        </div>
+
+        <div style="background: var(--bg); border: 1px solid var(--border); border-radius: 12px; padding: 1.5rem; margin-bottom: 2rem;">
+          <h4 style="color: #fff; font-family: var(--font-head); margin-bottom: 1rem;">Recommendations</h4>
+          <ul id="auditRecommendations" style="color: var(--text); line-height: 1.6;"></ul>
+        </div>
+
+        <div style="background: var(--bg); border: 1px solid var(--border); border-radius: 12px; padding: 1.5rem;">
+          <h4 style="color: #fff; font-family: var(--font-head); margin-bottom: 1rem;">Environmental Impact</h4>
+          <div id="auditImpact" style="color: var(--text); line-height: 1.6;"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TIPS -->
+  <section id="tips">
+    <div class="section-label">Reduce · Reuse · Recycle</div>
+    <h2 class="section-title">Waste Reduction Tips</h2>
+    <p class="section-sub">Small changes in daily habits can dramatically reduce the waste you generate.</p>
+
+    <div class="tips-grid">
+      <div class="tip-card">
+        <div class="tip-icon">🛍️</div>
+        <div class="tip-title">Carry Reusable Bags</div>
+        <div class="tip-text">Single-use plastic bags take 400–1000 years to decompose. Cloth bags reduce plastic waste by up to 70% per household.</div>
+      </div>
+      <div class="tip-card">
+        <div class="tip-icon">🌿</div>
+        <div class="tip-title">Compost Organic Waste</div>
+        <div class="tip-text">Kitchen scraps and garden waste make nutrient-rich compost. Composting diverts 30% of household waste from landfills.</div>
+      </div>
+      <div class="tip-card">
+        <div class="tip-icon">🔋</div>
+        <div class="tip-title">Dispose E-Waste Safely</div>
+        <div class="tip-text">Never throw electronics in regular bins. Mercury, lead, and cadmium can contaminate soil and groundwater for decades.</div>
+      </div>
+      <div class="tip-card">
+        <div class="tip-icon">💧</div>
+        <div class="tip-title">Use Refillable Bottles</div>
+        <div class="tip-text">India generates 25,940 tonnes of plastic waste daily. A single reusable bottle eliminates ~156 plastic bottles per year.</div>
+      </div>
+      <div class="tip-card">
+        <div class="tip-icon">📦</div>
+        <div class="tip-title">Segregate at Source</div>
+        <div class="tip-text">Use separate bins — Green (wet/organic), Blue (dry/recyclable), Red (hazardous). Proper segregation enables 80%+ recycling rates.</div>
+      </div>
+      <div class="tip-card">
+        <div class="tip-icon">🏥</div>
+        <div class="tip-title">Handle Medical Waste</div>
+        <div class="tip-text">Used medicines and medical supplies must go to designated collection points — never flush or bin them. Pharmacies often accept returns.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- WASTE TRACKING DASHBOARD -->
+  <section id="dashboard">
+    <div class="section-label">Track Your Impact</div>
+    <h2 class="section-title">Waste Tracking Dashboard</h2>
+    <p class="section-sub">Monitor your waste reduction progress and environmental impact over time.</p>
+
+    <div style="background: var(--surface); border: 1px solid var(--border); border-radius: 20px; padding: clamp(1.5rem,4vw,2.5rem); max-width: 1000px; margin: 0 auto;">
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.5rem; margin-bottom: 2rem;">
+        <div class="metric-card">
+          <div class="metric-icon">📊</div>
+          <div class="metric-value" id="totalWaste">0</div>
+          <div class="metric-label">Items Scanned</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-icon">♻️</div>
+          <div class="metric-value" id="recyclableCount">0</div>
+          <div class="metric-label">Recyclable Items</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-icon">🌱</div>
+          <div class="metric-value" id="organicCount">0</div>
+          <div class="metric-label">Organic Waste</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-icon">⚠️</div>
+          <div class="metric-value" id="hazardousCount">0</div>
+          <div class="metric-label">Hazardous Items</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-icon">🌍</div>
+          <div class="metric-value" id="carbonFootprint">0</div>
+          <div class="metric-label">CO₂ Saved (kg)</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-icon">💧</div>
+          <div class="metric-value" id="waterSaved">0</div>
+          <div class="metric-label">Water Saved (L)</div>
+        </div>
+      </div>
+
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 2rem;">
+        <div style="background: var(--bg); border: 1px solid var(--border); border-radius: 12px; padding: 1.5rem;">
+          <h3 style="color: #fff; font-family: var(--font-head); font-size: 1.1rem; margin-bottom: 1rem;">Weekly Progress</h3>
+          <canvas id="weeklyChart" width="300" height="200"></canvas>
+        </div>
+        <div style="background: var(--bg); border: 1px solid var(--border); border-radius: 12px; padding: 1.5rem;">
+          <h3 style="color: #fff; font-family: var(--font-head); font-size: 1.1rem; margin-bottom: 1rem;">Environmental Impact</h3>
+          <div id="impactStats">
+            <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+              <span style="color: var(--muted);">CO₂ Saved:</span>
+              <span style="color: var(--green-bright);" id="co2Saved">0 kg</span>
+            </div>
+            <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+              <span style="color: var(--muted);">Water Conserved:</span>
+              <span style="color: var(--blue);" id="waterSavedDisplay">0 L</span>
+            </div>
+            <div style="display: flex; justify-content: space-between;">
+              <span style="color: var(--muted);">Landfill Reduced:</span>
+              <span style="color: var(--amber);" id="landfillSaved">0 kg</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div style="text-align: center;">
+        <button id="resetDashboardBtn" onclick="resetDashboard()" style="background: rgba(239,68,68,0.1); border: 1px solid rgba(239,68,68,0.3); color: #fca5a5; padding: 10px 20px; border-radius: 8px; cursor: pointer; font-size: 0.9rem;">Reset Dashboard</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ENVIRONMENTAL IMPACT CALCULATOR -->
+  <section id="calculator">
+    <div class="section-label">Calculate Impact</div>
+    <h2 class="section-title">Environmental Impact Calculator</h2>
+    <p class="section-sub">Calculate the environmental impact of different waste disposal methods.</p>
+
+    <div style="background: var(--surface); border: 1px solid var(--border); border-radius: 20px; padding: clamp(1.5rem,4vw,2.5rem); max-width: 800px; margin: 0 auto;">
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 2rem;">
+        <div>
+          <label style="display: block; color: var(--muted); font-size: 0.9rem; margin-bottom: 0.5rem;">Waste Type</label>
+          <select id="calcWasteType" style="width: 100%; background: var(--bg); border: 1px solid var(--border); color: var(--text); padding: 12px; border-radius: 8px; font-family: var(--font-body);">
+            <option value="plastic">Plastic Bottle</option>
+            <option value="paper">Paper (1kg)</option>
+            <option value="glass">Glass Bottle</option>
+            <option value="metal">Aluminum Can</option>
+            <option value="organic">Organic Waste (1kg)</option>
+            <option value="electronic">Electronic Device</option>
+          </select>
+        </div>
+        <div>
+          <label style="display: block; color: var(--muted); font-size: 0.9rem; margin-bottom: 0.5rem;">Quantity</label>
+          <input type="number" id="calcQuantity" value="1" min="1" style="width: 100%; background: var(--bg); border: 1px solid var(--border); color: var(--text); padding: 12px; border-radius: 8px; font-family: var(--font-body);">
+        </div>
+      </div>
+
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 2rem;">
+        <button class="calc-btn" data-method="landfill">🏭 Landfill</button>
+        <button class="calc-btn" data-method="recycle">♻️ Recycle</button>
+        <button class="calc-btn" data-method="compost">🌱 Compost</button>
+        <button class="calc-btn" data-method="incinerate">🔥 Incinerate</button>
+      </div>
+
+      <div id="calcResult" style="background: var(--bg); border: 1px solid var(--border); border-radius: 12px; padding: 1.5rem; display: none;">
+        <h3 style="color: #fff; font-family: var(--font-head); margin-bottom: 1rem;">Impact Comparison</h3>
+        <div id="calcComparison"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- COMMUNITY TIPS -->
+  <section id="community">
+    <div class="section-label">Community Driven</div>
+    <h2 class="section-title">Share Your Tips</h2>
+    <p class="section-sub">Contribute and learn from the community's waste reduction strategies.</p>
+
+    <div style="background: var(--surface); border: 1px solid var(--border); border-radius: 20px; padding: clamp(1.5rem,4vw,2.5rem); max-width: 800px; margin: 0 auto;">
+      <div style="margin-bottom: 2rem;">
+        <textarea id="tipInput" placeholder="Share your waste reduction tip..." style="width: 100%; min-height: 100px; background: var(--bg); border: 1px solid var(--border); color: var(--text); padding: 12px; border-radius: 8px; font-family: var(--font-body); resize: vertical;"></textarea>
+        <button id="shareTipBtn" onclick="shareTip()" style="margin-top: 10px; background: var(--gradient-primary); color: #000; border: none; padding: 10px 20px; border-radius: 8px; cursor: pointer; font-weight: 600;">Share Tip</button>
+      </div>
+
+      <div id="communityTips"></div>
+    </div>
+  </section>
+
+</main>
+
+<!-- FOOTER -->
+<footer>
+  <div>
+    <strong style="color:var(--green-bright)">WasteWise AI</strong> · Built for UN SDG Goal 12 · AVKECO Idea Lab
+  </div>
+  <div>
+    <a href="#detect">🔍 Scan</a> · <a href="#bulk-analysis">📦 Bulk Analysis</a> · <a href="#scheduler">📅 Scheduler</a> · <a href="#marketplace">💰 Marketplace</a> · <a href="#gamification">⭐ Rewards</a> · <a href="#audit">📋 Audit</a> · <a href="#dashboard">📊 Dashboard</a> · <a href="#calculator">🧮 Calculator</a> · <a href="#recycling">📍 Centres</a> · <a href="#emergency">🚨 Report</a> · <a href="#tips">💡 Tips</a>
+  </div>
+  <div>
+    Powered by <a href="https://anthropic.com" target="_blank">Claude AI Vision</a> · 
+    Maps via <a href="https://openstreetmap.org" target="_blank">OpenStreetMap</a> · 
+    <a href="https://openrouter.ai" target="_blank">Free AI Models</a>
+  </div>
+</footer>
+
+<script>
+// ===== SAFE LOCALSTORAGE =====
+function safeGet(key, def) {
+  try {
+    const item = localStorage.getItem(key);
+    return item ? JSON.parse(item) : def;
+  } catch(e) { return def; }
+}
+function safeSet(key, val) {
+  try { localStorage.setItem(key, JSON.stringify(val)); } catch(e) {}
+}
+
+let currentImageBase64 = null;
+let currentMediaType = 'image/jpeg';
+let cameraStream = null;
+let bulkImageIdCounter = 0;
+
+// ===== WASTE COLLECTION SCHEDULER =====
+let scheduledPickups = safeGet('scheduledPickups', []);
+let collectionHistory = safeGet('collectionHistory', []);
+
+function schedulePickup() {
+  const category = document.getElementById('wasteCategory').value;
+  const date = document.getElementById('pickupDate').value;
+  const time = document.getElementById('pickupTime').value;
+  const quantity = document.getElementById('wasteQuantity').value;
+
+  if (!date || !quantity) {
+    alert('Please fill in all fields');
+    return;
+  }
+
+  const pickup = {
+    id: Date.now(),
+    category,
+    date,
+    time,
+    quantity: parseInt(quantity),
+    status: 'scheduled',
+    createdAt: new Date().toISOString()
+  };
+
+  scheduledPickups.push(pickup);
+  safeSet('scheduledPickups', scheduledPickups);
+
+  document.getElementById('pickupDate').value = '';
+  document.getElementById('wasteQuantity').value = '';
+
+  renderScheduledPickups();
+  alert('Pickup scheduled successfully!');
+}
+
+function renderScheduledPickups() {
+  const container = document.getElementById('upcomingPickups');
+  if (scheduledPickups.length === 0) {
+    container.innerHTML = '<div style="text-align: center; color: var(--muted); padding: 2rem;">No scheduled pickups</div>';
+    return;
+  }
+
+  container.innerHTML = scheduledPickups
+    .filter(p => new Date(p.date) >= new Date())
+    .sort((a, b) => new Date(a.date) - new Date(b.date))
+    .slice(0, 5)
+    .map(pickup => `
+      <div style="background: var(--bg); border: 1px solid var(--border); border-radius: 8px; padding: 1rem; margin-bottom: 0.5rem;">
+        <div style="display: flex; justify-content: space-between; align-items: start;">
+          <div>
+            <div style="color: #fff; font-weight: 600;">${pickup.category.charAt(0).toUpperCase() + pickup.category.slice(1)} Waste</div>
+            <div style="color: var(--muted); font-size: 0.9rem;">${new Date(pickup.date).toLocaleDateString()} • ${pickup.time}</div>
+            <div style="color: var(--green-bright); font-size: 0.9rem;">${pickup.quantity} kg</div>
+          </div>
+          <button onclick="cancelPickup(${pickup.id})" style="background: rgba(239,68,68,0.1); border: 1px solid rgba(239,68,68,0.3); color: #fca5a5; padding: 4px 8px; border-radius: 4px; cursor: pointer; font-size: 0.8rem;">Cancel</button>
+        </div>
+      </div>
+    `).join('');
+
+  renderCollectionHistory();
+}
+
+function cancelPickup(id) {
+  scheduledPickups = scheduledPickups.filter(p => p.id !== id);
+  safeSet('scheduledPickups', scheduledPickups);
+  renderScheduledPickups();
+}
+
+function renderCollectionHistory() {
+  const container = document.getElementById('collectionHistory');
+  if (collectionHistory.length === 0) {
+    container.innerHTML = '<div style="text-align: center; color: var(--muted); padding: 1rem;">No collection history</div>';
+    return;
+  }
+
+  container.innerHTML = collectionHistory
+    .sort((a, b) => new Date(b.completedAt) - new Date(a.completedAt))
+    .slice(0, 10)
+    .map(item => `
+      <div style="display: flex; justify-content: space-between; align-items: center; padding: 0.5rem 0; border-bottom: 1px solid var(--border);">
+        <div>
+          <div style="color: #fff; font-size: 0.9rem;">${item.category.charAt(0).toUpperCase() + item.category.slice(1)} Waste</div>
+          <div style="color: var(--muted); font-size: 0.8rem;">${new Date(item.completedAt).toLocaleDateString()}</div>
+        </div>
+        <div style="color: var(--green-bright); font-weight: 600;">${item.quantity} kg</div>
+      </div>
+    `).join('');
+}
+
+// ===== BULK WASTE ANALYSIS =====
+let bulkImages = [];
+
+function onBulkFileSelect(evt) {
+  const files = Array.from(evt.target.files);
+  if (files.length > 10) {
+    alert('Maximum 10 images allowed');
+    return;
+  }
+
+  files.forEach((file) => {
+    if (file.type.startsWith('image/')) {
+      const reader = new FileReader();
+      reader.onload = e => {
+        bulkImages.push({
+          id: bulkImageIdCounter++,
+          file,
+          base64: e.target.result.split(',')[1],
+          mediaType: file.type,
+          preview: e.target.result
+        });
+        renderBulkPreview();
+      };
+      reader.readAsDataURL(file);
+    }
+  });
+}
+
+function renderBulkPreview() {
+  const preview = document.getElementById('bulkPreview');
+  preview.innerHTML = bulkImages.map(img => `
+    <div style="position: relative;">
+      <img src="${img.preview}" style="width: 100%; height: 100px; object-fit: cover; border-radius: 8px; border: 1px solid var(--border);">
+      <button onclick="removeBulkImage(${img.id})" style="position: absolute; top: -5px; right: -5px; background: #ef4444; color: white; border: none; border-radius: 50%; width: 20px; height: 20px; cursor: pointer; font-size: 12px;">×</button>
+    </div>
+  `).join('');
+}
+
+function removeBulkImage(id) {
+  bulkImages = bulkImages.filter(img => img.id !== id);
+  renderBulkPreview();
+}
+
+function clearBulkImages() {
+  bulkImages = [];
+  document.getElementById('bulkPreview').innerHTML = '';
+  document.getElementById('bulkFileInput').value = '';
+  document.getElementById('bulkResults').style.display = 'none';
+}
+
+async function analyzeBulkWaste() {
+  if (bulkImages.length === 0) {
+    alert('Please select images first');
+    return;
+  }
+
+  const apiKey = (safeGet('or_key', '') || document.getElementById('apiKeyInput').value).trim();
+  if (!apiKey || !apiKey.startsWith('sk-or-')) {
+    alert('Please set your OpenRouter API key first');
+    return;
+  }
+
+  const btn = document.getElementById('analyzeBulkBtn');
+  btn.disabled = true;
+  btn.textContent = 'Analyzing...';
+
+  const results = [];
+  for (let i = 0; i < bulkImages.length; i++) {
+    const img = bulkImages[i];
+    try {
+      const result = await analyzeSingleImage(apiKey, img.base64, img.mediaType);
+      results.push({ ...result, imageIndex: i });
+    } catch (error) {
+      results.push({ error: error.message, imageIndex: i });
+    }
+  }
+
+  renderBulkResults(results);
+  btn.disabled = false;
+  btn.textContent = 'Analyze All Images';
+}
+
+async function analyzeSingleImage(apiKey, base64, mediaType) {
+  const prompt = 'You are a waste management AI. Analyse this image. Reply ONLY with a raw JSON object: {"isWaste":true,"wasteType":"Plastic Waste","subCategory":"PET Bottle","confidence":"High","hazardLevel":"Low","recyclable":"Yes","binColour":"Blue (Dry Recyclables)","description":"2 sentences","disposalSteps":["Step 1","Step 2"],"environmentalImpact":"2 sentences","emoji":"♻️"}';
+
+  const FALLBACK_MODELS = ['qwen/qwen2.5-vl-72b-instruct:free', 'qwen/qwen2.5-vl-32b-instruct:free'];
+
+  for (const model of FALLBACK_MODELS) {
+    try {
+      const res = await fetch('https://openrouter.ai/api/v1/chat/completions', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ' + apiKey,
+          'HTTP-Referer': window.location.href,
+          'X-Title': 'WasteWise AI'
+        },
+        body: JSON.stringify({
+          model: model,
+          messages: [{ role: 'user', content: [
+            { type: 'image_url', image_url: { url: 'data:' + mediaType + ';base64,' + base64 } },
+            { type: 'text', text: prompt }
+          ]}],
+          temperature: 0.1,
+          max_tokens: 800
+        })
+      });
+
+      if (res.ok) {
+        const data = await res.json();
+        const raw = data.choices[0].message.content;
+        const clean = raw.replace(/```json/g,'').replace(/```/g,'').trim();
+        const s = clean.indexOf('{'), e = clean.lastIndexOf('}');
+        return JSON.parse(clean.slice(s, e + 1));
+      }
+    } catch (e) {}
+  }
+  throw new Error('Analysis failed');
+}
+
+function renderBulkResults(results) {
+  const container = document.getElementById('bulkResults');
+  if (!container) return;
+
+  container.style.display = 'block';
+
+  const summary = results.reduce((acc, r) => {
+    if (!r.error) {
+      acc.total++;
+      if (r.recyclable === 'Yes') acc.recyclable++;
+      if (r.hazardLevel === 'High' || r.hazardLevel === 'Medium') acc.hazardous++;
+    }
+    return acc;
+  }, { total: 0, recyclable: 0, hazardous: 0 });
+
+  const summaryEl = document.getElementById('bulkSummary');
+  if (summaryEl) {
+    summaryEl.innerHTML = `
+      <div style="text-align: center; padding: 1rem; background: rgba(34,197,94,0.1); border-radius: 8px;">
+        <div style="font-size: 1.5rem; font-weight: 800; color: var(--green-bright);">${summary.total}</div>
+        <div style="color: var(--muted); font-size: 0.8rem;">Total Items</div>
+      </div>
+      <div style="text-align: center; padding: 1rem; background: rgba(59,130,246,0.1); border-radius: 8px;">
+        <div style="font-size: 1.5rem; font-weight: 800; color: var(--blue);">${summary.recyclable}</div>
+        <div style="color: var(--muted); font-size: 0.8rem;">Recyclable</div>
+      </div>
+      <div style="text-align: center; padding: 1rem; background: rgba(245,158,11,0.1); border-radius: 8px;">
+        <div style="font-size: 1.5rem; font-weight: 800; color: var(--amber);">${summary.hazardous}</div>
+        <div style="color: var(--muted); font-size: 0.8rem;">Hazardous</div>
+      </div>
+    `;
+  }
+
+  const detailsEl = document.getElementById('bulkDetails');
+  if (detailsEl) {
+    detailsEl.innerHTML = results.map((result, index) => `
+      <div style="background: var(--bg); border: 1px solid var(--border); border-radius: 12px; padding: 1rem; margin-bottom: 1rem;">
+        <div style="display: flex; gap: 1rem; align-items: start;">
+          <img src="${bulkImages[index].preview}" style="width: 80px; height: 80px; object-fit: cover; border-radius: 8px; border: 1px solid var(--border);">
+          <div style="flex: 1;">
+            ${result.error ? 
+              `<div style="color: #ef4444;">Analysis failed: ${result.error}</div>` :
+              `<div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 0.5rem;">
+                <div>
+                  <div style="color: #fff; font-weight: 600;">${result.wasteType}</div>
+                  <div style="color: var(--muted); font-size: 0.9rem;">${result.subCategory} • ${result.confidence} confidence</div>
+                </div>
+                <div style="font-size: 1.5rem;">${result.emoji}</div>
+              </div>
+              <div style="color: var(--text); font-size: 0.9rem; margin-bottom: 0.5rem;">${result.description}</div>
+              <div style="display: flex; gap: 0.5rem;">
+                <span class="hazard-tag ${result.hazardLevel.toLowerCase() === 'high' ? 'hazard-high' : result.hazardLevel.toLowerCase() === 'medium' ? 'hazard-med' : 'hazard-low'}">${result.hazardLevel}</span>
+                <span style="background: ${result.recyclable === 'Yes' ? 'rgba(34,197,94,0.15)' : 'rgba(239,68,68,0.15)'}; color: ${result.recyclable === 'Yes' ? 'var(--green-pale)' : '#fca5a5'}; padding: 3px 10px; border-radius: 6px; font-size: 0.75rem; font-weight: 600;">${result.recyclable === 'Yes' ? 'Recyclable' : 'Not Recyclable'}</span>
+              </div>`
+            }
+          </div>
+        </div>
+      </div>
+    `).join('');
+  }
+}
+
+// ===== RECYCLING MARKETPLACE =====
+let marketplaceListings = safeGet('marketplaceListings', []);
+
+function listMaterial() {
+  const type = document.getElementById('materialType').value;
+  const quantity = document.getElementById('materialQuantity').value;
+  const price = document.getElementById('materialPrice').value;
+  const description = document.getElementById('materialDescription').value;
+
+  if (!quantity || !price || !description) {
+    alert('Please fill in all fields');
+    return;
+  }
+
+  const listing = {
+    id: Date.now(),
+    type,
+    quantity: parseInt(quantity),
+    price: parseFloat(price),
+    description,
+    seller: 'Anonymous',
+    createdAt: new Date().toISOString(),
+    status: 'active'
+  };
+
+  marketplaceListings.push(listing);
+  safeSet('marketplaceListings', marketplaceListings);
+
+  document.getElementById('materialQuantity').value = '';
+  document.getElementById('materialPrice').value = '';
+  document.getElementById('materialDescription').value = '';
+
+  renderMarketplaceListings();
+  alert('Material listed successfully!');
+}
+
+function renderMarketplaceListings() {
+  const container = document.getElementById('marketplaceListings');
+  if (marketplaceListings.length === 0) {
+    container.innerHTML = '<div style="text-align: center; color: var(--muted); padding: 2rem;">No listings available</div>';
+    return;
+  }
+
+  container.innerHTML = marketplaceListings
+    .filter(l => l.status === 'active')
+    .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
+    .map(listing => `
+      <div style="background: var(--bg); border: 1px solid var(--border); border-radius: 12px; padding: 1rem; margin-bottom: 1rem;">
+        <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 0.5rem;">
+          <div>
+            <div style="color: #fff; font-weight: 600;">${listing.type.charAt(0).toUpperCase() + listing.type.slice(1)}</div>
+            <div style="color: var(--muted); font-size: 0.9rem;">${listing.quantity} kg • ₹${listing.price}/kg</div>
+          </div>
+          <div style="color: var(--green-bright); font-weight: 600;">₹${(listing.quantity * listing.price).toFixed(0)}</div>
+        </div>
+        <div style="color: var(--text); font-size: 0.9rem; margin-bottom: 0.5rem;">${listing.description}</div>
+        <div style="display: flex; gap: 0.5rem;">
+          <button onclick="contactSeller(${listing.id})" style="background: var(--gradient-primary); color: #000; border: none; padding: 6px 12px; border-radius: 6px; cursor: pointer; font-size: 0.8rem; font-weight: 600;">Contact Seller</button>
+          <button onclick="removeListing(${listing.id})" style="background: rgba(239,68,68,0.1); border: 1px solid rgba(239,68,68,0.3); color: #fca5a5; padding: 6px 12px; border-radius: 6px; cursor: pointer; font-size: 0.8rem;">Remove</button>
+        </div>
+      </div>
+    `).join('');
+}
+
+function contactSeller(id) {
+  const listing = marketplaceListings.find(l => l.id === id);
+  if (listing) {
+    alert(`Contact information for ${listing.type} listing:\n\nSeller: ${listing.seller}\nQuantity: ${listing.quantity} kg\nPrice: ₹${listing.price}/kg\n\nPlease use this information to arrange pickup/delivery.`);
+  }
+}
+
+function removeListing(id) {
+  marketplaceListings = marketplaceListings.filter(l => l.id !== id);
+  safeSet('marketplaceListings', marketplaceListings);
+  renderMarketplaceListings();
+}
+
+// ===== GAMIFICATION & REWARDS =====
+let userStats = safeGet('userStats', { points: 0, level: 1, streak: 0, badges: [], challenges: [] });
+let badges = [
+  { id: 'first-scan', name: 'First Scan', description: 'Scanned your first waste item', icon: '🔍', requirement: 1 },
+  { id: 'recycling-hero', name: 'Recycling Hero', description: 'Recycled 10 items', icon: '♻️', requirement: 10 },
+  { id: 'waste-warrior', name: 'Waste Warrior', description: 'Scanned 50 items', icon: '⚔️', requirement: 50 },
+  { id: 'eco-champion', name: 'Eco Champion', description: 'Reached level 5', icon: '👑', requirement: 5 }
+];
+
+function updateUserStats() {
+  userStats.level = Math.floor(userStats.points / 100) + 1;
+
+  badges.forEach(badge => {
+    if (!userStats.badges.includes(badge.id)) {
+      let earned = false;
+      if (badge.id === 'first-scan' && wasteData.length >= 1) earned = true;
+      if (badge.id === 'recycling-hero' && wasteData.filter(w => w.recyclable === 'Yes').length >= 10) earned = true;
+      if (badge.id === 'waste-warrior' && wasteData.length >= 50) earned = true;
+      if (badge.id === 'eco-champion' && userStats.level >= 5) earned = true;
+
+      if (earned) {
+        userStats.badges.push(badge.id);
+        setTimeout(() => alert(`🏆 New badge earned: ${badge.name}!`), 500);
+      }
+    }
+  });
+
+  safeSet('userStats', userStats);
+  renderUserStats();
+}
+
+function renderUserStats() {
+  const pointsEl = document.getElementById('userPoints');
+  const levelEl = document.getElementById('userLevel');
+  const streakEl = document.getElementById('currentStreak');
+  const rankEl = document.getElementById('leaderboardRank');
+  const badgesEl = document.getElementById('userBadges');
+
+  if (pointsEl) pointsEl.textContent = userStats.points;
+  if (levelEl) levelEl.textContent = userStats.level;
+  if (streakEl) streakEl.textContent = userStats.streak;
+  if (rankEl) rankEl.textContent = 'Coming Soon';
+
+  if (badgesEl) {
+    if (userStats.badges.length === 0) {
+      badgesEl.innerHTML = '<div style="text-align: center; color: var(--muted); font-size: 0.9rem;">No badges yet</div>';
+    } else {
+      badgesEl.innerHTML = userStats.badges.map(badgeId => {
+        const badge = badges.find(b => b.id === badgeId);
+        return `
+          <div style="text-align: center; padding: 1rem; background: var(--bg); border: 1px solid var(--border); border-radius: 8px;">
+            <div style="font-size: 2rem; margin-bottom: 0.5rem;">${badge.icon}</div>
+            <div style="color: #fff; font-size: 0.8rem; font-weight: 600;">${badge.name}</div>
+          </div>
+        `;
+      }).join('');
+    }
+  }
+}
+
+function joinChallenge(challengeId) {
+  if (!userStats.challenges.includes(challengeId)) {
+    userStats.challenges.push(challengeId);
+    safeSet('userStats', userStats);
+    alert('Challenge joined! Complete the requirements to earn points.');
+  } else {
+    alert('You are already participating in this challenge.');
+  }
+}
+
+// ===== WASTE AUDIT TOOL =====
+function generateAuditReport() {
+  const orgName = document.getElementById('orgName').value.trim();
+  const employeeCount = parseInt(document.getElementById('employeeCount').value) || 1;
+  const paperWaste = parseFloat(document.getElementById('paperWaste').value) || 0;
+  const plasticWaste = parseFloat(document.getElementById('plasticWaste').value) || 0;
+  const organicWaste = parseFloat(document.getElementById('organicWaste').value) || 0;
+  const ewasteAmount = parseFloat(document.getElementById('ewasteAmount').value) || 0;
+
+  if (!orgName) {
+    alert('Please enter organization name');
+    return;
+  }
+
+  const totalWaste = paperWaste + plasticWaste + organicWaste + ewasteAmount;
+  const wastePerPerson = totalWaste / employeeCount;
+  const recyclableWaste = paperWaste + plasticWaste;
+  const recyclingPotential = totalWaste > 0 ? (recyclableWaste / totalWaste * 100) : 0;
+  
+  const landfillCostPerKg = 5;
+  const recyclingRevenuePerKg = 8;
+  const compostingCostPerKg = 3;
+  const annualSavings = (recyclableWaste * recyclingRevenuePerKg) + (organicWaste * compostingCostPerKg) - (totalWaste * landfillCostPerKg);
+
+  const totalWasteEl = document.getElementById('totalWasteWeek');
+  const wastePerPersonEl = document.getElementById('wastePerPerson');
+  const recyclingPotentialEl = document.getElementById('recyclingPotential');
+  const costSavingsEl = document.getElementById('costSavings');
+
+  if (totalWasteEl) totalWasteEl.textContent = totalWaste.toFixed(1);
+  if (wastePerPersonEl) wastePerPersonEl.textContent = wastePerPerson.toFixed(1);
+  if (recyclingPotentialEl) recyclingPotentialEl.textContent = recyclingPotential.toFixed(0);
+  if (costSavingsEl) costSavingsEl.textContent = Math.max(0, annualSavings * 52).toLocaleString();
+
+  const recommendations = [];
+  if (recyclingPotential < 50) recommendations.push("Implement a comprehensive recycling program to increase recycling rate above 50%");
+  if (paperWaste > plasticWaste * 2) recommendations.push("Focus on paper recycling - consider digital documentation to reduce paper usage");
+  if (organicWaste > totalWaste * 0.3) recommendations.push("Set up composting facility for organic waste to reduce landfill contributions");
+  if (ewasteAmount > 0) recommendations.push("Partner with certified e-waste recyclers for responsible electronics disposal");
+  if (wastePerPerson > 2) recommendations.push("Implement waste reduction strategies - aim for less than 2kg waste per person per week");
+  recommendations.push("Conduct regular waste audits (quarterly) to track progress");
+  recommendations.push("Train staff on waste segregation at source");
+
+  const recEl = document.getElementById('auditRecommendations');
+  if (recEl) recEl.innerHTML = recommendations.map(rec => `<li>${rec}</li>`).join('');
+
+  const co2Savings = recyclableWaste * 2.5;
+  const landfillReduction = totalWaste * 0.8;
+  const waterSavings = recyclableWaste * 5;
+
+  const impactEl = document.getElementById('auditImpact');
+  if (impactEl) {
+    impactEl.innerHTML = `
+      <p>By implementing recommended waste management practices, your organization could:</p>
+      <ul style="margin-top:0.5rem;padding-left:1.2rem;">
+        <li>Save approximately ${co2Savings.toFixed(0)} kg of CO₂ emissions annually</li>
+        <li>Reduce landfill contributions by ${landfillReduction.toFixed(0)} kg per week</li>
+        <li>Conserve ${waterSavings.toFixed(0)} liters of water through recycling</li>
+        <li>Contribute to India's goal of 80% waste processing by 2030</li>
+      </ul>
+    `;
+  }
+
+  const reportEl = document.getElementById('auditReport');
+  if (reportEl) {
+    reportEl.style.display = 'block';
+    reportEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+}
+
+// ===== EMERGENCY REPORTING =====
+function getCurrentLocation() {
+  if (!navigator.geolocation) {
+    alert('Geolocation not supported');
+    return;
+  }
+
+  navigator.geolocation.getCurrentPosition(pos => {
+    const lat = pos.coords.latitude.toFixed(6);
+    const lon = pos.coords.longitude.toFixed(6);
+    document.getElementById('reportLocation').value = `${lat}, ${lon}`;
+  }, err => {
+    alert('Location access denied: ' + err.message);
+  });
+}
+
+function onReportFileSelect(evt) {
+  const file = evt.target.files[0];
+  if (file && file.type.startsWith('image/')) {
+    const reader = new FileReader();
+    reader.onload = e => {
+      const img = document.getElementById('reportPreviewImg');
+      img.src = e.target.result;
+      img.style.display = 'block';
+    };
+    reader.readAsDataURL(file);
+  }
+}
+
+function submitReport() {
+  const type = document.getElementById('reportType').value;
+  const description = document.getElementById('reportDescription').value;
+  const location = document.getElementById('reportLocation').value;
+
+  if (!description || !location) {
+    alert('Please fill in description and location');
+    return;
+  }
+
+  const statusEl = document.getElementById('reportStatus');
+  if (statusEl) {
+    statusEl.textContent = 'Report submitted successfully! Authorities will be notified.';
+    statusEl.style.color = 'var(--green-bright)';
+  }
+
+  const descEl = document.getElementById('reportDescription');
+  const locEl = document.getElementById('reportLocation');
+  const fileEl = document.getElementById('reportFileInput');
+  const imgEl = document.getElementById('reportPreviewImg');
+
+  if (descEl) descEl.value = '';
+  if (locEl) locEl.value = '';
+  if (fileEl) fileEl.value = '';
+  if (imgEl) imgEl.style.display = 'none';
+
+  userStats.points += 25;
+  updateUserStats();
+
+  setTimeout(() => {
+    if (statusEl) {
+      statusEl.textContent = '';
+      statusEl.style.color = '';
+    }
+  }, 5000);
+}
+
+function switchTab(tab) {
+  const uploadTab = document.getElementById('tabUpload');
+  const cameraTab = document.getElementById('tabCamera');
+  const uploadPanel = document.getElementById('panelUpload');
+  const cameraPanel = document.getElementById('panelCamera');
+
+  if (uploadTab) uploadTab.classList.toggle('active', tab === 'upload');
+  if (cameraTab) cameraTab.classList.toggle('active', tab === 'camera');
+  if (uploadPanel) uploadPanel.style.display = tab === 'upload' ? '' : 'none';
+  if (cameraPanel) cameraPanel.style.display = tab === 'camera' ? '' : 'none';
+  clearResult();
+}
+
+function onFileSelect(evt) { const f = evt.target.files[0]; if (f) loadImageFile(f); }
+function loadImageFile(file) {
+  currentMediaType = file.type || 'image/jpeg';
+  const reader = new FileReader();
+  reader.onload = e => {
+    currentImageBase64 = e.target.result.split(',')[1];
+    const p = document.getElementById('previewImg');
+    p.src = e.target.result; p.style.display = 'block';
+    clearResult();
+  };
+  reader.readAsDataURL(file);
+}
+
+async function startCamera() {
+  try {
+    cameraStream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' }, audio: false });
+    const v = document.getElementById('cameraFeed');
+    v.srcObject = cameraStream; v.style.display = 'block';
+    document.getElementById('cameraPlaceholder').style.display = 'none';
+    document.getElementById('startCamBtn').style.display = 'none';
+    document.getElementById('captureBtn').style.display = '';
+    document.getElementById('stopCamBtn').style.display = '';
+  } catch(err) { showError('Camera error: ' + err.message); }
+}
+function captureFrame() {
+  const v = document.getElementById('cameraFeed');
+  const canvas = document.getElementById('captureCanvas');
+  canvas.width = v.videoWidth; canvas.height = v.videoHeight;
+  canvas.getContext('2d').drawImage(v, 0, 0);
+  const dataURL = canvas.toDataURL('image/jpeg', 0.9);
+  currentImageBase64 = dataURL.split(',')[1]; currentMediaType = 'image/jpeg';
+  const img = document.getElementById('capturedImg');
+  img.src = dataURL; img.style.display = 'block'; clearResult();
+}
+function stopCamera() {
+  if (cameraStream) { cameraStream.getTracks().forEach(t => t.stop()); cameraStream = null; }
+  document.getElementById('cameraFeed').style.display = 'none';
+  document.getElementById('cameraFeed').srcObject = null;
+  document.getElementById('cameraPlaceholder').style.display = '';
+  document.getElementById('startCamBtn').style.display = '';
+  document.getElementById('captureBtn').style.display = 'none';
+  document.getElementById('stopCamBtn').style.display = 'none';
+}
+
+function saveKey() {
+  const key = document.getElementById('apiKeyInput').value.trim();
+  if (!key || !key.startsWith('sk-or-')) {
+    setKeyStatus('Key must start with sk-or- — get it from openrouter.ai/keys', '#fca5a5'); return;
+  }
+  safeSet('or_key', key);
+  setKeyStatus('Key saved! Ready to scan.', 'var(--green-bright)');
+}
+function setKeyStatus(msg, color) {
+  const el = document.getElementById('keyStatus');
+  if (el) {
+    el.textContent = msg;
+    el.style.color = color;
+  }
+}
+
+async function getFreeVisionModels(apiKey) {
+  try {
+    const res = await fetch('https://openrouter.ai/api/v1/models', {
+      headers: { 'Authorization': 'Bearer ' + apiKey }
+    });
+    if (!res.ok) return null;
+    const data = await res.json();
+    const freeVision = data.data.filter(m => {
+      const isFree = m.id.endsWith(':free');
+      const hasVision = m.architecture && m.architecture.input_modalities && m.architecture.input_modalities.includes('image');
+      return isFree && hasVision;
+    }).map(m => m.id);
+    return freeVision.length > 0 ? freeVision : null;
+  } catch(e) { return null; }
+}
+
+async function tryModel(apiKey, model, prompt) {
+  const res = await fetch('https://openrouter.ai/api/v1/chat/completions', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer ' + apiKey,
+      'HTTP-Referer': window.location.href,
+      'X-Title': 'WasteWise AI'
+    },
+    body: JSON.stringify({
+      model: model,
+      messages: [{ role: 'user', content: [
+        { type: 'image_url', image_url: { url: 'data:' + currentMediaType + ';base64,' + currentImageBase64 } },
+        { type: 'text', text: prompt }
+      ]}],
+      temperature: 0.1,
+      max_tokens: 800
+    })
+  });
+  if (res.status === 401) throw new Error('INVALID_KEY');
+  if (!res.ok) {
+    const e = await res.json().catch(() => ({}));
+    throw new Error((e.error && e.error.message) || 'HTTP ' + res.status);
+  }
+  const data = await res.json();
+  const raw = data.choices && data.choices[0] && data.choices[0].message && data.choices[0].message.content;
+  if (!raw) throw new Error('Empty response');
+  const clean = raw.replace(/```json/g,'').replace(/```/g,'').trim();
+  const s = clean.indexOf('{'), e2 = clean.lastIndexOf('}');
+  if (s === -1 || e2 === -1) throw new Error('No JSON in response');
+  return JSON.parse(clean.slice(s, e2 + 1));
+}
+
+async function analyzeWaste() {
+  const apiKey = (safeGet('or_key', '') || document.getElementById('apiKeyInput').value).trim();
+  hideError();
+  if (!apiKey || !apiKey.startsWith('sk-or-')) {
+    showError('Paste your free OpenRouter key (starts with sk-or-) and click Save. Get it at openrouter.ai/keys'); return;
+  }
+  if (!currentImageBase64) { showError('Upload an image or capture a frame first.'); return; }
+
+  const btn = document.getElementById('analyzeBtn');
+  btn.disabled = true;
+  document.getElementById('loadingPanel').style.display = 'block';
+  document.getElementById('resultPanel').style.display = 'none';
+  const loadingEl = document.getElementById('loadingText');
+
+  const prompt = 'You are a waste management AI for India. Analyse this image. Reply ONLY with a raw JSON object, no markdown, no extra text. Use this exact structure: {"isWaste":true,"wasteType":"Plastic Waste","subCategory":"PET Bottle","confidence":"High","hazardLevel":"Low","recyclable":"Yes","binColour":"Blue (Dry Recyclables)","description":"Describe the waste in 2 sentences.","disposalSteps":["Step 1","Step 2","Step 3","Step 4"],"environmentalImpact":"2 sentences on impact if not disposed properly.","emoji":"♻️"} — wasteType must be one of: Plastic Waste, Electronic Waste, Organic Waste, Metal Waste, Medical/Biomedical Waste, Hazardous Waste, Mixed Waste, Not Waste. binColour for India: Green (Wet Organic), Blue (Dry Recyclables), Red (Hazardous/Biomedical), Black (E-waste/Sanitary). Use a real emoji for the emoji field. If no waste visible set isWaste false and wasteType "Not Waste".';
+
+  const FALLBACK_MODELS = [
+    'qwen/qwen2.5-vl-72b-instruct:free',
+    'qwen/qwen2.5-vl-32b-instruct:free',
+    'google/gemma-3-27b-it:free',
+    'google/gemma-3-12b-it:free',
+    'moonshotai/kimi-vl-a3b-thinking:free',
+    'nvidia/llama-3.1-nemotron-nano-8b-instruct:free'
+  ];
+
+  let modelsToTry = FALLBACK_MODELS;
+
+  loadingEl.textContent = 'Fetching available models...';
+  const liveModels = await getFreeVisionModels(apiKey);
+  if (liveModels && liveModels.length > 0) {
+    const liveSet = new Set(liveModels);
+    modelsToTry = [...liveModels, ...FALLBACK_MODELS.filter(m => !liveSet.has(m))];
+  }
+
+  let lastError = 'No free vision models available right now';
+  for (const model of modelsToTry) {
+    loadingEl.textContent = 'Trying ' + model.split('/').pop() + '...';
+    try {
+      const result = await tryModel(apiKey, model, prompt);
+      if (!result.emoji || result.emoji.length > 6) result.emoji = '♻️';
+      document.getElementById('loadingPanel').style.display = 'none';
+      btn.disabled = false;
+      renderResult(result);
+      return;
+    } catch(err) {
+      if (err.message === 'INVALID_KEY') {
+        lastError = 'Invalid API key. Check your key at openrouter.ai/keys';
+        break;
+      }
+      lastError = err.message;
+    }
+  }
+
+  document.getElementById('loadingPanel').style.display = 'none';
+  btn.disabled = false;
+  showError('Could not get a result. Error: ' + lastError + ' — Try refreshing or getting a new key at openrouter.ai/keys');
+}
+
+function renderResult(r) {
+  document.getElementById('resultPanel').style.display = 'block';
+  const badge = document.getElementById('resultBadge');
+  badge.textContent = r.isWaste ? 'Waste Detected' : 'Not Waste';
+  badge.className = 'result-badge ' + (r.isWaste ? 'is-waste' : 'not-waste');
+  document.getElementById('resultType').textContent = r.wasteType || '—';
+  document.getElementById('resultConfidence').textContent = 'Confidence: ' + (r.confidence||'—') + ' · Sub-type: ' + (r.subCategory||'—');
+  document.getElementById('resultEmoji').textContent = r.emoji || '♻️';
+  const level = (r.hazardLevel||'').toLowerCase();
+  document.getElementById('resultHazard').innerHTML = '<span class="hazard-tag ' + (level==='high'?'hazard-high':level==='medium'?'hazard-med':'hazard-low') + '">' + (r.hazardLevel||'—') + '</span>';
+  document.getElementById('resultRecyclable').textContent = r.recyclable || '—';
+  document.getElementById('resultDesc').textContent = r.description || '—';
+  document.getElementById('resultBin').textContent = r.binColour || '—';
+  document.getElementById('resultImpact').textContent = r.environmentalImpact || '—';
+  const list = document.getElementById('disposalSteps');
+  list.innerHTML = '';
+  (r.disposalSteps||[]).forEach(function(s,i) {
+    const li = document.createElement('li');
+    li.innerHTML = '<span class="step-num">'+(i+1)+'</span><span>'+s+'</span>';
+    list.appendChild(li);
+  });
+  document.getElementById('resultPanel').scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+function clearResult() { document.getElementById('resultPanel').style.display = 'none'; hideError(); }
+function showError(msg) { const el = document.getElementById('errorMsg'); el.textContent = msg; el.style.display = 'block'; }
+function hideError() { document.getElementById('errorMsg').style.display = 'none'; }
+
+function findCentres() {
+  const status = document.getElementById('locationStatus');
+  status.textContent = 'Requesting location...';
+  if (!navigator.geolocation) { status.textContent = 'Geolocation not supported.'; return; }
+  navigator.geolocation.getCurrentPosition(function(pos) {
+    const lat = pos.coords.latitude, lon = pos.coords.longitude;
+    const type = document.getElementById('wasteTypeFilter').value;
+    document.getElementById('mapPlaceholder').style.display = 'none';
+    const frame = document.getElementById('mapFrame');
+    frame.src = 'https://www.openstreetmap.org/export/embed.html?bbox='+(lon-0.04)+'%2C'+(lat-0.04)+'%2C'+(lon+0.04)+'%2C'+(lat+0.04)+'&layer=mapnik&marker='+lat+'%2C'+lon;
+    frame.style.display = 'block';
+    const fullUrl = 'https://www.openstreetmap.org/search?query='+encodeURIComponent(type)+'+near+'+lat+','+lon;
+    status.innerHTML = 'Location found. <a href="'+fullUrl+'" target="_blank" style="color:var(--green-bright)">Open full map search</a>';
+    const list = document.getElementById('centreList');
+    list.style.display = 'block';
+    list.innerHTML = '<div style="font-size:0.8rem;color:var(--muted);margin-bottom:0.8rem;text-transform:uppercase;letter-spacing:1px;font-weight:600;">Search Links Near You</div>';
+    [
+      ['OpenStreetMap Search','https://www.openstreetmap.org/search?query='+encodeURIComponent(type)+'#map=14/'+lat+'/'+lon],
+      ['Google Maps Recycling','https://www.google.com/maps/search/'+encodeURIComponent(type)+'/@'+lat+','+lon+',14z'],
+      ['CPCB Hazardous Waste','https://cpcb.nic.in/hazardous-waste.php'],
+      ['Mumbai BMC Portal','https://portal.mcgm.gov.in'],
+      ['E-Waste Recyclers','https://www.google.com/maps/search/e+waste+recycling+near+me/@'+lat+','+lon+',14z']
+    ].forEach(function(item, i) {
+      const div = document.createElement('div'); div.className = 'centre-item';
+      div.innerHTML = '<div class="centre-pin">'+(i+1)+'</div><div style="flex:1"><div class="centre-name"><a href="'+item[1]+'" target="_blank" style="color:#fff;text-decoration:none;">'+item[0]+' &rarr;</a></div></div>';
+      list.appendChild(div);
+    });
+  }, function(err) {
+    document.getElementById('locationStatus').textContent = 'Location error: ' + err.message;
+  }, { timeout: 10000 });
+}
+
+// ===== WASTE TRACKING DASHBOARD =====
+let wasteData = safeGet('wasteData', []);
+let weeklyData = safeGet('weeklyData', [0,0,0,0,0,0,0]);
+
+function updateDashboard() {
+  const stats = wasteData.reduce((acc, item) => {
+    acc.total++;
+    if (item.recyclable === 'Yes') acc.recyclable++;
+    if (item.wasteType && item.wasteType.toLowerCase().includes('organic')) acc.organic++;
+    if (item.hazardLevel === 'High' || item.hazardLevel === 'Medium') acc.hazardous++;
+    if (item.recyclable === 'Yes') {
+      acc.co2Saved += 0.5;
+      acc.waterSaved += 2;
+    }
+    return acc;
+  }, { total: 0, recyclable: 0, organic: 0, hazardous: 0, co2Saved: 0, waterSaved: 0 });
+
+  document.getElementById('totalWaste').textContent = stats.total;
+  document.getElementById('recyclableCount').textContent = stats.recyclable;
+  document.getElementById('organicCount').textContent = stats.organic;
+  document.getElementById('hazardousCount').textContent = stats.hazardous;
+  document.getElementById('carbonFootprint').textContent = stats.co2Saved.toFixed(1);
+  document.getElementById('waterSaved').textContent = stats.waterSaved;
+
+  const co2SavedEl = document.getElementById('co2Saved');
+  const waterSavedDisplayEl = document.getElementById('waterSavedDisplay');
+  const landfillSavedEl = document.getElementById('landfillSaved');
+
+  if (co2SavedEl) co2SavedEl.textContent = stats.co2Saved.toFixed(1) + ' kg';
+  if (waterSavedDisplayEl) waterSavedDisplayEl.textContent = stats.waterSaved + ' L';
+  if (landfillSavedEl) landfillSavedEl.textContent = (stats.total * 0.3).toFixed(1) + ' kg';
+
+  updateWeeklyChart();
+}
+
+function updateWeeklyChart() {
+  const canvas = document.getElementById('weeklyChart');
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+  const width = canvas.width;
+  const height = canvas.height;
+  const maxVal = Math.max(...weeklyData, 1);
+
+  ctx.clearRect(0, 0, width, height);
+  ctx.fillStyle = 'rgba(34,197,94,0.2)';
+  ctx.strokeStyle = '#22c55e';
+  ctx.lineWidth = 2;
+
+  weeklyData.forEach((val, i) => {
+    const barHeight = (val / maxVal) * (height - 40);
+    const barWidth = (width - 60) / 7;
+    const x = 30 + i * barWidth;
+    const y = height - 30 - barHeight;
+
+    ctx.fillRect(x, y, barWidth - 2, barHeight);
+    ctx.strokeRect(x, y, barWidth - 2, barHeight);
+
+    ctx.fillStyle = '#6b9e7c';
+    ctx.font = '10px sans-serif';
+    ctx.textAlign = 'center';
+    ctx.fillText(['M','T','W','T','F','S','S'][i], x + barWidth/2, height - 10);
+    ctx.fillStyle = 'rgba(34,197,94,0.2)';
+  });
+}
+
+function resetDashboard() {
+  if (confirm('Reset all tracking data? This cannot be undone.')) {
+    wasteData = [];
+    weeklyData = [0,0,0,0,0,0,0];
+    safeSet('wasteData', wasteData);
+    safeSet('weeklyData', weeklyData);
+    updateDashboard();
+  }
+}
+
+// ===== ENVIRONMENTAL IMPACT CALCULATOR =====
+const impactData = {
+  plastic: { landfill: { co2: 2.5, water: 0, waste: 1 }, recycle: { co2: 0.5, water: 2, waste: 0.1 }, compost: { co2: 3, water: 0, waste: 1 }, incinerate: { co2: 3.2, water: 0, waste: 0.05 } },
+  paper: { landfill: { co2: 1.2, water: 0, waste: 1 }, recycle: { co2: 0.3, water: 5, waste: 0.2 }, compost: { co2: 0.8, water: 0, waste: 0.8 }, incinerate: { co2: 2.1, water: 0, waste: 0.01 } },
+  glass: { landfill: { co2: 0.8, water: 0, waste: 1 }, recycle: { co2: 0.2, water: 1, waste: 0.05 }, compost: { co2: 0.8, water: 0, waste: 1 }, incinerate: { co2: 1.5, water: 0, waste: 0.02 } },
+  metal: { landfill: { co2: 1.8, water: 0, waste: 1 }, recycle: { co2: 0.4, water: 3, waste: 0.1 }, compost: { co2: 1.8, water: 0, waste: 1 }, incinerate: { co2: 2.8, water: 0, waste: 0.03 } },
+  organic: { landfill: { co2: 2.1, water: 0, waste: 1 }, recycle: { co2: 2.1, water: 0, waste: 1 }, compost: { co2: 0.5, water: 10, waste: 0.1 }, incinerate: { co2: 1.8, water: 0, waste: 0.02 } },
+  electronic: { landfill: { co2: 15, water: 0, waste: 1 }, recycle: { co2: 3, water: 8, waste: 0.2 }, compost: { co2: 15, water: 0, waste: 1 }, incinerate: { co2: 12, water: 0, waste: 0.05 } }
+};
+
+function calculateImpact(method) {
+  const wasteType = document.getElementById('calcWasteType').value;
+  const quantity = parseInt(document.getElementById('calcQuantity').value) || 1;
+  const data = impactData[wasteType];
+  const impact = data[method];
+  const totalCo2 = (impact.co2 * quantity).toFixed(1);
+  const totalWater = impact.water * quantity;
+  const totalWaste = (impact.waste * quantity * 100).toFixed(0);
+
+  const resultDiv = document.getElementById('calcResult');
+  const comparisonDiv = document.getElementById('calcComparison');
+
+  comparisonDiv.innerHTML = `
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 1rem; margin-bottom: 1rem;">
+      <div style="text-align: center; padding: 1rem; background: rgba(34,197,94,0.1); border-radius: 8px;">
+        <div style="font-size: 1.5rem; font-weight: 800; color: var(--green-bright);">${totalCo2}kg</div>
+        <div style="color: var(--muted); font-size: 0.8rem;">CO₂ Emissions</div>
+      </div>
+      <div style="text-align: center; padding: 1rem; background: rgba(59,130,246,0.1); border-radius: 8px;">
+        <div style="font-size: 1.5rem; font-weight: 800; color: var(--blue);">${totalWater}L</div>
+        <div style="color: var(--muted); font-size: 0.8rem;">Water Usage</div>
+      </div>
+      <div style="text-align: center; padding: 1rem; background: rgba(245,158,11,0.1); border-radius: 8px;">
+        <div style="font-size: 1.5rem; font-weight: 800; color: var(--amber);">${totalWaste}%</div>
+        <div style="color: var(--muted); font-size: 0.8rem;">Waste Volume</div>
+      </div>
+    </div>
+    <div style="color: var(--muted); font-size: 0.9rem; text-align: center;">
+      ${method === 'recycle' ? '♻️ Recycling saves resources and reduces environmental impact!' :
+        method === 'compost' ? '🌱 Composting returns nutrients to the soil!' :
+        method === 'incinerate' ? '🔥 Incineration reduces waste volume but releases CO₂' :
+        '🏭 Landfill is the least environmentally friendly option'}
+    </div>
+  `;
+
+  resultDiv.style.display = 'block';
+}
+
+// ===== COMMUNITY TIPS =====
+let communityTips = safeGet('communityTips', []);
+if (communityTips.length === 0) {
+  communityTips = [{
+    id: Date.now(),
+    author: 'Anonymous',
+    content: 'Started using cloth bags for shopping. Saved money and reduced plastic waste!',
+    likes: 12,
+    timestamp: new Date().toISOString()
+  }];
+  safeSet('communityTips', communityTips);
+}
+
+function shareTip() {
+  const tipText = document.getElementById('tipInput').value.trim();
+  if (!tipText) return;
+
+  const tip = {
+    id: Date.now(),
+    author: 'Anonymous User',
+    content: tipText,
+    likes: 0,
+    timestamp: new Date().toISOString()
+  };
+
+  communityTips.unshift(tip);
+  if (communityTips.length > 10) communityTips = communityTips.slice(0, 10);
+  safeSet('communityTips', communityTips);
+  document.getElementById('tipInput').value = '';
+  renderCommunityTips();
+}
+
+function renderCommunityTips() {
+  const container = document.getElementById('communityTips');
+  container.innerHTML = communityTips.map(tip => `
+    <div class="community-tip">
+      <div class="tip-author">👤 ${tip.author}</div>
+      <div class="tip-content">"${tip.content}"</div>
+      <div class="tip-actions">
+        <button onclick="likeTip(${tip.id})" class="like-btn">👍 ${tip.likes}</button>
+      </div>
+    </div>
+  `).join('');
+}
+
+function likeTip(tipId) {
+  const tip = communityTips.find(t => t.id === tipId);
+  if (tip) {
+    tip.likes++;
+    safeSet('communityTips', communityTips);
+    renderCommunityTips();
+  }
+}
+
+// ===== INTEGRATION WITH EXISTING FUNCTIONS =====
+const originalRenderResult = renderResult;
+renderResult = function(r) {
+  originalRenderResult(r);
+
+  const today = new Date().getDay();
+  weeklyData[today]++;
+  wasteData.push(r);
+
+  if (wasteData.length > 100) wasteData = wasteData.slice(-100);
+  if (weeklyData[today] > 50) weeklyData[today] = 50;
+
+  safeSet('wasteData', wasteData);
+  safeSet('weeklyData', weeklyData);
+
+  updateDashboard();
+
+  userStats.points += r.isWaste ? 10 : 5;
+  if (r.recyclable === 'Yes') userStats.points += 5;
+  if (r.hazardLevel === 'High') userStats.points += 15;
+
+  updateUserStats();
+};
+
+// ===== DOM CONTENT LOADED - SETUP ALL EVENT LISTENERS =====
+document.addEventListener('DOMContentLoaded', function() {
+  // Load saved API key
+  const saved = safeGet('or_key', '');
+  if (saved) {
+    const apiKeyInput = document.getElementById('apiKeyInput');
+    if (apiKeyInput) apiKeyInput.value = saved;
+    setKeyStatus('Key loaded.', 'var(--green-bright)');
+  }
+
+  // Setup drag and drop for all upload zones
+  function setupDropZone(zoneId, handler) {
+    const zone = document.getElementById(zoneId);
+    if (!zone) return;
+    zone.addEventListener('dragover', e => { e.preventDefault(); zone.classList.add('drag-over'); });
+    zone.addEventListener('dragleave', () => zone.classList.remove('drag-over'));
+    zone.addEventListener('drop', e => {
+      e.preventDefault(); 
+      zone.classList.remove('drag-over');
+      handler(e);
+    });
+  }
+
+  setupDropZone('dropZone', (e) => {
+    const file = e.dataTransfer.files[0];
+    if (file && file.type.startsWith('image/')) loadImageFile(file);
+  });
+  setupDropZone('bulkDropZone', (e) => {
+    const files = e.dataTransfer.files;
+    if (files.length) onBulkFileSelect({ target: { files: files } });
+  });
+  setupDropZone('reportDropZone', (e) => {
+    const file = e.dataTransfer.files[0];
+    if (file && file.type.startsWith('image/')) onReportFileSelect({ target: { files: [file] } });
+  });
+
+  // Calculator buttons
+  document.querySelectorAll('.calc-btn').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      document.querySelectorAll('.calc-btn').forEach(b => b.classList.remove('active'));
+      e.target.classList.add('active');
+      calculateImpact(e.target.dataset.method);
+    });
+  });
+
+  // Initialize all components
+  updateDashboard();
+  renderCommunityTips();
+  renderScheduledPickups();
+  renderMarketplaceListings();
+  renderUserStats();
+
+  // Scroll progress bar
+  window.addEventListener('scroll', function() {
+    const scrollTop = window.pageYOffset;
+    const docHeight = document.body.offsetHeight - window.innerHeight;
+    const scrollPercent = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
+    const progressBar = document.getElementById('scrollProgressBar');
+    if (progressBar) progressBar.style.width = scrollPercent + '%';
+  });
+});
+</script>
+</body>
+</html>
