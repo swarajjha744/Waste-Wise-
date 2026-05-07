@@ -8,3 +8,4 @@ To increase user engagement, WasteWise AI introduces a Gamification and Rewards 
 The website is designed with a modern, responsive, and eco-friendly interface using advanced HTML, CSS, and JavaScript technologies. It provides smooth navigation, animated visuals, real-time interaction, and mobile-friendly support. Overall, WasteWise AI is a complete smart waste management solution that combines Artificial Intelligence, sustainability, recycling awareness, and community participation to build a cleaner, greener, and healthier environment for future generations. 
 
 # Output : 
+<img width="1903" height="905" alt="Image" src="https://github.com/user-attachments/assets/9f3ed7bc-bb73-418f-b7d3-02d0277d7b2b" />
